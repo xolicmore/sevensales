@@ -21,7 +21,7 @@
         <item>Магазины</item>
         <item>Категории</item>
         <item>Настройки</item>
-        <item>Выход</item>
+        
        
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>

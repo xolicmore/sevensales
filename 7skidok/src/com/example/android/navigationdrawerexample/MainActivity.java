@@ -177,27 +177,43 @@ public class MainActivity extends Activity {
     	getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     	//Toast.makeText(this,String.valueOf(getFragmentManager().getBackStackEntryCount()), Toast.LENGTH_LONG).show();getFragmentManager().getBackStackEntryCount();
 	        
-    	if (position!=0){
-	    	Fragment fragment = new PlanetFragment();
-	        Bundle args = new Bundle();
-	        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-	        fragment.setArguments(args);
-	
-	        FragmentManager fragmentManager = getFragmentManager();	      
-	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();	
-	        
-	        // update selected item and title, then close the drawer
-	        mDrawerList.setItemChecked(position, true);
-	        setTitle(mPlanetTitles[position]);
-	        mDrawerLayout.closeDrawer(mDrawerList);
-    	}else{
-    		Fragment fragment = new SalesFragment();
+//    	if (position!=0){
+//	    	Fragment fragment = new PlanetFragment();
+//	        Bundle args = new Bundle();
+//	        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+//	        fragment.setArguments(args);
+//	
+//	        FragmentManager fragmentManager = getFragmentManager();	      
+//	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();	
+//	        
+//	        // update selected item and title, then close the drawer
+//	        mDrawerList.setItemChecked(position, true);
+//	        setTitle(mPlanetTitles[position]);
+//	        mDrawerLayout.closeDrawer(mDrawerList);
+//    	}
+    	
+    	if (0==position) {
+    		SalesFragment fragment = new SalesFragment();
+    		fragment.getAllSales();    		 
+    		
     		FragmentManager fragmentManager = getFragmentManager();
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-	        mDrawerList.setItemChecked(position, true);
-	        
+	        mDrawerList.setItemChecked(position, true);	        
 	        mDrawerLayout.closeDrawer(mDrawerList);
     	}
+    	
+    	if (1==position) {
+    		ShopsFragment fragment = new ShopsFragment();
+    		fragment.getAllShops();    		 
+    		
+    		FragmentManager fragmentManager = getFragmentManager();
+	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+	        mDrawerList.setItemChecked(position, true);	        
+	        mDrawerLayout.closeDrawer(mDrawerList);
+    	}
+    	
+    	mDrawerList.setItemChecked(position, true);	        
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     @Override
