@@ -35,6 +35,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+         <activity
+            android:label="Скидка"
+            android:name=".SingleSaleActivity" >
+        </activity>
 
     </application>
 
