@@ -1,7 +1,10 @@
-package com.example.android.navigationdrawerexample;
+package com.sevensales;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.sevensales.R;
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;

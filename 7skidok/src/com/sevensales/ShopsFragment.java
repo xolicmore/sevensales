@@ -1,4 +1,4 @@
-package com.example.android.navigationdrawerexample;
+package com.sevensales;
 
 
 
@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.example.android.navigationdrawerexample.MainActivity.PlanetFragment;
+
+import com.sevensales.R;
+import com.sevensales.MainActivity.PlanetFragment;
 
 import android.app.Fragment;
 import android.app.FragmentManager;

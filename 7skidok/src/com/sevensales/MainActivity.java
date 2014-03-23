@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package com.example.android.navigationdrawerexample;
+package com.sevensales;
 
 import java.util.Locale;
+
+import com.sevensales.R;
 
 import android.app.Activity;
 import android.app.Fragment;

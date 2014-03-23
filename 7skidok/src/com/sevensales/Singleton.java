@@ -1,4 +1,4 @@
-package com.example.android.navigationdrawerexample;
+package com.sevensales;
 
 import android.app.Application;
 
