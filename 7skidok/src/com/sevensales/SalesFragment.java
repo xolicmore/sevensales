@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -21,7 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class SalesFragment extends Fragment {
     public static final String ARG_PLANET_NUMBER = "planet_number";
     
-    public ArrayList<Sale> Sales;
+    public ArrayList<Sale> sales;
     
     public SalesFragment() {
         // Empty constructor required for fragment subclasses
@@ -41,27 +43,9 @@ public class SalesFragment extends Fragment {
                
        
         
-        ArrayList<Sale> list =this.Sales; 
+        ArrayList<Sale> list =this.sales; 
         
-        ArrayList<Map<String, Object>> data=new ArrayList<Map<String, Object>>();
-        Map<String, Object> m;
-        
-        for (int i = 0; i < Sales.size(); i++) {
-            m = new HashMap<String, Object>();
-            m.put("shop_id", Sales.get(i).shop_id);
-            m.put("shop_name", Sales.get(i).shop_name);
-            m.put("description", Sales.get(i).description);
-           // m.put(ATTRIBUTE_NAME_IMAGE, R.drawable.ic_launcher);
-            data.add(m);
-          }
-        
-        
-        String[] from = new String[] { "shop_id" , "shop_name" , "description"  };
-        int[] to = new int[] { R.id.shop_id , R.id.shop_name , R.id.description};
-        
-        SimpleAdapter adapter = new SimpleAdapter(
-        		getActivity().getApplicationContext(),
-        		data, R.layout.list_item, from, to);        
+        ListAdapter adapter = new SalesListItemAdapter(list, getActivity()); 
         
         ListView listview = (ListView) v.findViewById(R.id.sales_list);
         listview.setAdapter(adapter);
@@ -104,22 +88,22 @@ public class SalesFragment extends Fragment {
     
     public void getAllSales(){
     	//Log.v("SalesFragment", "hi");    	
-    	Sales=new ArrayList<Sale>();  
+    	sales=new ArrayList<Sale>();  
     	
-    	Sales.add(new Sale().Sale_test(1, "mexx"  , "desc 1"));   
-    	Sales.add(new Sale().Sale_test(2, "ret"   , "desc 2"));  
-    	Sales.add(new Sale().Sale_test(3, "need " , "desc 4")); 
-    	Sales.add(new Sale().Sale_test(4, "need " , "desc 5")); 
-    	Sales.add(new Sale().Sale_test(5, "need"  , "desc 6")); 
+    	sales.add(new Sale().Sale_test(1, "mexx"  , "desc 1"));   
+    	sales.add(new Sale().Sale_test(2, "ret"   , "desc 2"));  
+    	sales.add(new Sale().Sale_test(3, "need " , "desc 4")); 
+    	sales.add(new Sale().Sale_test(4, "need " , "desc 5")); 
+    	sales.add(new Sale().Sale_test(5, "need"  , "desc 6")); 
     	
     }
     
     public void getSalesInShop(int id){
     	//Log.v("SalesFragment", "hi");    	
-    	Sales=new ArrayList<Sale>();  
+    	sales=new ArrayList<Sale>();  
     	
-    	Sales.add(new Sale().Sale_test(id, "mexx"  , "desc 1"));   
-    	Sales.add(new Sale().Sale_test(id, "ret"   , "desc 2")); 
+    	sales.add(new Sale().Sale_test(id, "mexx"  , "desc 1"));   
+    	sales.add(new Sale().Sale_test(id, "ret"   , "desc 2")); 
     	
     }
 }

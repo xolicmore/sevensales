@@ -47,36 +47,12 @@ public class ShopsFragment extends Fragment {
             Bundle savedInstanceState) {
     	
     	View v = inflater.inflate(R.layout.sales, container, false); 
-    	//Toast.makeText(getActivity().getApplicationContext()," main view", Toast.LENGTH_LONG).show();
-    	
+    	//Toast.makeText(getActivity().getApplicationContext()," main view", Toast.LENGTH_LONG).show();    	
     	//Log.v("SalesFragment", "Main");
     	
-    	
-    	
-               
-       
+        ArrayList<Sale> list =this.Sales;
         
-        ArrayList<Sale> list =this.Sales; 
-        
-        ArrayList<Map<String, Object>> data=new ArrayList<Map<String, Object>>();
-        Map<String, Object> m;
-        
-        for (int i = 0; i < Sales.size(); i++) {
-            m = new HashMap<String, Object>();
-            m.put("shop_id", Sales.get(i).shop_id);
-            m.put("shop_name", Sales.get(i).shop_name);
-            m.put("description", Sales.get(i).description);
-           // m.put(ATTRIBUTE_NAME_IMAGE, R.drawable.ic_launcher);
-            data.add(m);
-          }
-        
-        
-        String[] from = new String[] { "shop_id" , "shop_name" , "description"  };
-        int[] to = new int[] { R.id.shop_id , R.id.shop_name , R.id.description};
-        
-        SimpleAdapter adapter = new SimpleAdapter(
-        		getActivity().getApplicationContext(),
-        		data, R.layout.list_item, from, to);        
+        ListAdapter adapter = new SalesListItemAdapter(list, getActivity());             
         
         ListView listview = (ListView) v.findViewById(R.id.sales_list);
         listview.setAdapter(adapter);

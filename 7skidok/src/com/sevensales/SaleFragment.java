@@ -52,6 +52,11 @@ public class SaleFragment extends Fragment {
         return v;
     }
     
+    @Override
+    public String toString() {
+        return this.shop_id + " " + this.shop_name + " " + this.shop_desription;
+    }
+    
     
    
 }
