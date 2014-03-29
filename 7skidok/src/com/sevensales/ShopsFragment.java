@@ -3,6 +3,8 @@ package com.sevensales;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +40,8 @@ public class ShopsFragment extends Fragment {
     
     public ArrayList<Sale> Sales;
     
+    public ArrayList<Shop> shops;
+    
     public ShopsFragment() {
         // Empty constructor required for fragment subclasses
     }
@@ -46,15 +50,21 @@ public class ShopsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
     	
-    	View v = inflater.inflate(R.layout.sales, container, false); 
+    	View v = inflater.inflate(R.layout.shops, container, false); 
     	//Toast.makeText(getActivity().getApplicationContext()," main view", Toast.LENGTH_LONG).show();    	
     	//Log.v("SalesFragment", "Main");
     	
-        ArrayList<Sale> list =this.Sales;
+        ArrayList<Shop> list =this.shops;
         
-        ListAdapter adapter = new SalesListItemAdapter(list, getActivity());             
+        Collections.sort(list, new Comparator<Shop>(){
+		    public int compare(Shop s1, Shop s2) {
+		        return s1.name.compareToIgnoreCase(s2.name);
+		    }
+		});
         
-        ListView listview = (ListView) v.findViewById(R.id.sales_list);
+        ListAdapter adapter = new ShopsListItemAdapter(list, getActivity());             
+        
+        ListView listview = (ListView) v.findViewById(R.id.shops_list);
         listview.setAdapter(adapter);
         
         listview.setOnItemClickListener(new OnItemClickListener() {
@@ -65,7 +75,7 @@ public class ShopsFragment extends Fragment {
 
 				SalesFragment fragment = new SalesFragment();
 //		       	fragment.getS    
-				TextView tv_id = (TextView) view.findViewById(R.id.shop_id);
+				TextView tv_id = (TextView) view.findViewById(R.id.id);
 		        
 				fragment.getSalesInShop(Integer.parseInt(tv_id.getText().toString()));
 				
@@ -80,13 +90,13 @@ public class ShopsFragment extends Fragment {
     }
     
     public void getAllShops(){
-    	//Log.v("SalesFragment", "hi");    	
-    	Sales=new ArrayList<Sale>();  
-    	
-    	Sales.add(new Sale().Sale_test(1, "Amazon"  , "desc 1"));   
-    	Sales.add(new Sale().Sale_test(2, "Ebay"   , "desc 2"));  
-    	Sales.add(new Sale().Sale_test(3, "Electro " , "desc 4")); 
-    	Sales.add(new Sale().Sale_test(4, "OnlineShopping" , "desc 5"));     	 
+//    	//Log.v("SalesFragment", "hi");    	
+//    	Sales=new ArrayList<Sale>();  
+//    	
+//    	Sales.add(new Sale().Sale_test(1, "Amazon"  , "desc 1"));   
+//    	Sales.add(new Sale().Sale_test(2, "Ebay"   , "desc 2"));  
+//    	Sales.add(new Sale().Sale_test(3, "Electro " , "desc 4")); 
+//    	Sales.add(new Sale().Sale_test(4, "OnlineShopping" , "desc 5"));     	 
     	
     }
 }

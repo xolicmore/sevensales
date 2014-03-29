@@ -1,12 +1,16 @@
 package com.sevensales;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.sevensales.R;
 
+import android.app.Application;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,8 +29,10 @@ public class SalesFragment extends Fragment {
     
     public ArrayList<Sale> sales;
     
+    
     public SalesFragment() {
         // Empty constructor required for fragment subclasses
+    	
     }
 
     @Override
@@ -36,14 +42,16 @@ public class SalesFragment extends Fragment {
     	View v = inflater.inflate(R.layout.sales, container, false); 
     	//Toast.makeText(getActivity().getApplicationContext()," main view", Toast.LENGTH_LONG).show();
     	
-    	Log.v("SalesFragment", "Main");
-    	
-    	
-    	
-               
-       
+    	//Log.v("SalesFragment", "Main");       
         
         ArrayList<Sale> list =this.sales; 
+        
+
+		Collections.sort(list, new Comparator<Sale>(){
+		    public int compare(Sale s1, Sale s2) {
+		        return String.valueOf(s1.id).compareToIgnoreCase(String.valueOf(s2.id));
+		    }
+		});
         
         ListAdapter adapter = new SalesListItemAdapter(list, getActivity()); 
         
@@ -63,15 +71,7 @@ public class SalesFragment extends Fragment {
 				SaleFragment fragment = new SaleFragment();
 		        Bundle args = new Bundle();
 		        
-		        //parent.getItemAtPosition(position).
-		        
-		        TextView tv_id = (TextView) view.findViewById(R.id.shop_id);
-		        TextView tv_name = (TextView) view.findViewById(R.id.shop_name);
-		        TextView tv_description = (TextView) view.findViewById(R.id.description);	
-		        
-		        fragment.shop_id=tv_id.getText().toString();
-		        fragment.shop_name=tv_name.getText().toString();
-		        fragment.shop_desription=tv_description.getText().toString();
+		        fragment.sale=(Sale) parent.getItemAtPosition(position);
 		        
 		        fragment.setArguments(args);
 		
@@ -87,14 +87,21 @@ public class SalesFragment extends Fragment {
     }
     
     public void getAllSales(){
-    	//Log.v("SalesFragment", "hi");    	
-    	sales=new ArrayList<Sale>();  
     	
-    	sales.add(new Sale().Sale_test(1, "mexx"  , "desc 1"));   
-    	sales.add(new Sale().Sale_test(2, "ret"   , "desc 2"));  
-    	sales.add(new Sale().Sale_test(3, "need " , "desc 4")); 
-    	sales.add(new Sale().Sale_test(4, "need " , "desc 5")); 
-    	sales.add(new Sale().Sale_test(5, "need"  , "desc 6")); 
+    	//Singleton storage=(Singleton) getActivity().getApplication();
+    	//sales=storage.sales_list;
+    	
+    	//Log.v("SalesFragment", "hi");    	
+    	//sales=new ArrayList<Sale>();  
+    	//Log.v("Act ", test);
+//  	sales.add(new Sale().Sale_test(1, "mexx"  , "desc 1"));   
+//    	sales.add(new Sale().Sale_test(2, "ret"   , "desc 2"));  
+//    	sales.add(new Sale().Sale_test(3, "need " , "desc 4")); 
+//    	sales.add(new Sale().Sale_test(4, "need " , "desc 5")); 
+//    	sales.add(new Sale().Sale_test(5, "need"  , "desc 6")); 
+    //	Singleton storage=(Singleton) c;
+//    	sales=storage.getSalesList();
+    	//Log.v("Act ", getActivity().toString());
     	
     }
     

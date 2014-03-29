@@ -5,7 +5,7 @@
     android:background="#ffffff">
     
     <ListView
-        android:id="@+id/sales_list"
+        android:id="@+id/shops_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
          />

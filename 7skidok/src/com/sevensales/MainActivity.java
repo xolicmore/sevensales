@@ -16,6 +16,9 @@
 
 package com.sevensales;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 import com.sevensales.R;
@@ -30,6 +33,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -77,11 +81,22 @@ public class MainActivity extends Activity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mPlanetTitles;
+    
+    public Singleton storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        storage=(Singleton) this.getApplication();
+        storage.setContext(MainActivity.this);
+        storage.setFragmentManager(getFragmentManager());
+        storage.downloadShops();
+//      storage.downloadSales();
+        
+//      Toast.makeText(getApplicationContext()," main view", Toast.LENGTH_LONG).show();
+//      Log.d("your context MAin--> ", getApplicationContext().toString());
 
         mTitle = mDrawerTitle = getTitle();
         mPlanetTitles = getResources().getStringArray(R.array.planets_array);
@@ -109,12 +124,12 @@ public class MainActivity extends Activity {
                 R.string.drawer_close  /* "close drawer" description for accessibility */
                 ) {
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
+               // getActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
+                //getActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -195,8 +210,10 @@ public class MainActivity extends Activity {
 //    	}
     	
     	if (0==position) {
+    		getActionBar().setTitle("Скидки");
     		SalesFragment fragment = new SalesFragment();
-    		fragment.getAllSales();    		 
+    		fragment.sales=storage.getSalesList();
+    		
     		
     		FragmentManager fragmentManager = getFragmentManager();
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -205,8 +222,10 @@ public class MainActivity extends Activity {
     	}
     	
     	if (1==position) {
+    		getActionBar().setTitle("Магазины");
     		ShopsFragment fragment = new ShopsFragment();
-    		fragment.getAllShops();    		 
+    		fragment.shops=storage.getShopsList();
+    		   		 
     		
     		FragmentManager fragmentManager = getFragmentManager();
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -221,7 +240,7 @@ public class MainActivity extends Activity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getActionBar().setTitle(mTitle);
+        //getActionBar().setTitle(mTitle);
     }
 
     /**
