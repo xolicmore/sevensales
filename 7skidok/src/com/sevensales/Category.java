@@ -4,9 +4,7 @@ public class Category {
 
 	public int id;	
 	public String name;
-	
-	
-	public String description;	
+		
 	
 	public Category() {}
 	public Category(String id,String name) {		

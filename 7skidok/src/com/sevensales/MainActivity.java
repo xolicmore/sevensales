@@ -92,8 +92,9 @@ public class MainActivity extends Activity {
         storage=(Singleton) this.getApplication();
         storage.setContext(MainActivity.this);
         storage.setFragmentManager(getFragmentManager());
+        storage.downloadCategories();
         storage.downloadShops();
-//      storage.downloadSales();
+        storage.downloadSales();
         
 //      Toast.makeText(getApplicationContext()," main view", Toast.LENGTH_LONG).show();
 //      Log.d("your context MAin--> ", getApplicationContext().toString());
@@ -209,8 +210,7 @@ public class MainActivity extends Activity {
 //	        mDrawerLayout.closeDrawer(mDrawerList);
 //    	}
     	
-    	if (0==position) {
-    		getActionBar().setTitle("Скидки");
+    	if (0==position) {    		
     		SalesFragment fragment = new SalesFragment();
     		fragment.sales=storage.getSalesList();
     		
@@ -221,10 +221,20 @@ public class MainActivity extends Activity {
 	        mDrawerLayout.closeDrawer(mDrawerList);
     	}
     	
-    	if (1==position) {
-    		getActionBar().setTitle("Магазины");
+    	if (1==position) {    		
     		ShopsFragment fragment = new ShopsFragment();
     		fragment.shops=storage.getShopsList();
+    		   		 
+    		
+    		FragmentManager fragmentManager = getFragmentManager();
+	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+	        mDrawerList.setItemChecked(position, true);	        
+	        mDrawerLayout.closeDrawer(mDrawerList);
+    	}
+    	
+    	if (2==position) {    		
+    		CategoriesFragment fragment = new CategoriesFragment();
+    		fragment.categories=storage.getCategoriesList();
     		   		 
     		
     		FragmentManager fragmentManager = getFragmentManager();
@@ -240,7 +250,7 @@ public class MainActivity extends Activity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        //getActionBar().setTitle(mTitle);
+        getActionBar().setTitle(mTitle);
     }
 
     /**

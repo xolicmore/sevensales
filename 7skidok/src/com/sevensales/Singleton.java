@@ -27,6 +27,7 @@ public final class Singleton extends Application {
 	private ProgressDialog pDialog;
 	private static String sales_url = "http://7skidok.ru/api/?action=sales";
 	private static String shops_url = "http://7skidok.ru/api/?action=shops";
+	private static String categories_url = "http://7skidok.ru/api/?action=sale_categories";
 	private Context appContext;
 	private FragmentManager appFragmentManager;
 	
@@ -34,11 +35,14 @@ public final class Singleton extends Application {
 	private JSONObject sale = null;	
 	
 	private JSONArray shops = null;
-	private JSONArray categories = null;
+	private JSONArray s_categories = null;
 	private JSONObject shop = null;	
+	
+	private JSONArray categories = null;
 	
 	public ArrayList<Sale> sales_list=new ArrayList<Sale>();
 	public ArrayList<Shop> shops_list=new ArrayList<Shop>();
+	public ArrayList<Category> categories_list=new ArrayList<Category>();
 //	private MyClass m_A = new MyClass();
 //	@Override
 //	
@@ -75,17 +79,18 @@ public final class Singleton extends Application {
 		  return device_uuid;
 	  }
 	  
-	  public String getSalesUrl(){
-		  String device_uuid = Secure.getString(this.getContentResolver(),Secure.ANDROID_ID);
-		  String url= sales_url+"&uid="+device_uuid; 
-		  //Log.d("your device uuid --> ", url);
+	  public String getSalesUrl(){		  
+		  String url= sales_url+"&uid="+getDeviceId(); 		  
 		  return url;
 	  }
 	  
-	  public String getShopsUrl(){
-		  String device_uuid = Secure.getString(this.getContentResolver(),Secure.ANDROID_ID);
-		  String url= shops_url+"&uid="+device_uuid; 
-		  //Log.d("your device uuid --> ", url);
+	  public String getShopsUrl(){		  
+		  String url= shops_url+"&uid="+getDeviceId(); 		  
+		  return url;
+	  }
+	  
+	  public String getCategoriesUrl(){		 
+		  String url= categories_url+"&uid="+getDeviceId();		  
 		  return url;
 	  }
 	  
@@ -98,15 +103,36 @@ public final class Singleton extends Application {
 //					"111","333","none","none big"));
 		  return sales_list;
 	  }
+	
+	  public ArrayList<Sale> getSalesListByCategory(int id){
+		  ArrayList<Sale> templist=new ArrayList<Sale>();
+		   for(Sale s : sales_list){
+			  if (s.shop_id==id){
+				  templist.add(s);
+			  }	          
+		    }		
+		  return templist;
+	  }
 	  
 	  public ArrayList<Shop> getShopsList(){	
-//		  sales_list.add(new Sale("1","test app1","test","7","shop test","111",
-//					"999","111","none","none big"));
-//		  sales_list.add(new Sale("9","test app3","test","7","shop test","111",
-//					"555","999","none","none big"));
-//		  sales_list.add(new Sale("4","test app2","test","7","shop test","111",
-//					"111","333","none","none big"));
 		  return shops_list;
+	  }
+	
+	  
+	  public ArrayList<Shop> getShopsListByCategory(int id){
+		  ArrayList<Shop> templist=new ArrayList<Shop>();
+		   for(Shop s : shops_list){
+			   for(Category c : s.categories){
+	       	          if (c.id==id){
+	       	        	  templist.add(s);
+	       	          }
+			    }			          
+		    }		
+		  return templist;
+	  }
+	  
+	  public ArrayList<Category> getCategoriesList(){
+		  return categories_list;
 	  }
 	  
 	  public void downloadSales(){
@@ -114,6 +140,9 @@ public final class Singleton extends Application {
 	  }
 	  public void downloadShops(){
 		  new GetDataShops().execute();			  
+	  }
+	  public void downloadCategories(){
+		  new GetDataCategories().execute();			  
 	  }
 	   
 
@@ -204,10 +233,10 @@ public final class Singleton extends Application {
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();				
-				pDialog = new ProgressDialog(appContext);
-				pDialog.setMessage("Идет загрузка данных...");
-				pDialog.setCancelable(false);				
-				pDialog.show();
+//				pDialog = new ProgressDialog(appContext);
+//				pDialog.setMessage("Идет загрузка данных...");
+//				pDialog.setCancelable(false);				
+//				pDialog.show();
 
 			}
 
@@ -235,16 +264,16 @@ public final class Singleton extends Application {
 								String s_sales = obj.getString("sales");
 								String s_img_url = obj.getString("img_url");
 								
-								categories= obj.getJSONArray("categories");
+								s_categories= obj.getJSONArray("categories");
 								
-								Category[] s_categories=new Category[categories.length()];
+								Category[] temp_categories=new Category[s_categories.length()];
 								
-								for (int j = 0; j < categories.length(); j++) {		
+								for (int j = 0; j < s_categories.length(); j++) {		
 									JSONObject c_obj = new JSONObject();
-									c_obj=categories.getJSONObject(j);
+									c_obj=s_categories.getJSONObject(j);
 									String s_c_id = c_obj.getString("id");
 									String s_c_name = c_obj.getString("name");									
-									s_categories[j]=new Category(s_c_id,s_c_name);
+									temp_categories[j]=new Category(s_c_id,s_c_name);
 									
 									//Log.d("Categories:" + s_id,s_c_id+" "+s_c_name+" ");									
 								}
@@ -261,7 +290,7 @@ public final class Singleton extends Application {
 //										img_big+" ");
 								
 							   
-								shops_list.add(new Shop(s_id,s_name,s_sales,s_img_url,s_categories));  
+								shops_list.add(new Shop(s_id,s_name,s_sales,s_img_url,temp_categories));  
 							}	
 						}
 						
@@ -280,8 +309,69 @@ public final class Singleton extends Application {
 			protected void onPostExecute(Void result) {
 				super.onPostExecute(result);
 				
-				if (pDialog.isShowing())
-					pDialog.dismiss();				
+//				if (pDialog.isShowing())
+//					pDialog.dismiss();				
+//						
+			}
+		}
+		private class GetDataCategories extends AsyncTask<Void, Void, Void> {
+
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();				
+//				pDialog = new ProgressDialog(appContext);
+//				pDialog.setMessage("Идет загрузка данных...");
+//				pDialog.setCancelable(false);				
+//				pDialog.show();
+
+			}
+
+			@Override
+			protected Void doInBackground(Void... arg0) {				
+				ServiceHandler sh = new ServiceHandler();
+				String jsonStr = sh.makeServiceCall(getCategoriesUrl(), ServiceHandler.GET);				
+
+				if (jsonStr != null) {
+					try {
+						
+						JSONObject jsonObj = new JSONObject(jsonStr);
+						
+						if (jsonObj.getString("success")=="true") {
+							
+							categories=jsonObj.getJSONArray("categories");
+							
+							for (int i = 0; i < categories.length(); i++) {								
+								
+								JSONObject obj = new JSONObject();
+								
+								obj = categories.getJSONObject(i);
+								String c_id = obj.getString("id");
+								String c_name = obj.getString("name");	
+								
+								//Log.d("Cate:" + c_id,c_name+" ");
+								
+							   
+								categories_list.add(new Category(c_id,c_name));  
+							}	
+						}
+						
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				} else {
+					Log.e("ServiceHandler", "Couldn't get any data from the url");
+				}
+
+				return null;
+			}
+
+			@SuppressLint("NewApi")
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+				
+//				if (pDialog.isShowing())
+//					pDialog.dismiss();				
 						
 			}
 		}

@@ -1,7 +1,5 @@
 package com.sevensales;
 
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,14 +33,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ShopsFragment extends Fragment {
+public class CategoriesFragment extends Fragment {
     public static final String ARG_PLANET_NUMBER = "planet_number";
     
-    public ArrayList<Sale> Sales;
+    public ArrayList<Category> categories;
     
-    public ArrayList<Shop> shops;
     
-    public ShopsFragment() {
+    public CategoriesFragment() {
         // Empty constructor required for fragment subclasses
     }
 
@@ -50,19 +47,19 @@ public class ShopsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
     	
-    	View v = inflater.inflate(R.layout.shops, container, false); 
+    	View v = inflater.inflate(R.layout.category, container, false);     
     	
-        ArrayList<Shop> list =this.shops;
+        ArrayList<Category> list =this.categories;
         
-        Collections.sort(list, new Comparator<Shop>(){
-		    public int compare(Shop s1, Shop s2) {
+        Collections.sort(list, new Comparator<Category>(){
+		    public int compare(Category s1,Category  s2) {
 		        return s1.name.compareToIgnoreCase(s2.name);
 		    }
 		});
         
-        ListAdapter adapter = new ShopsListItemAdapter(list, getActivity());             
+        ListAdapter adapter = new CategoriesListItemAdapter(list, getActivity());       
         
-        ListView listview = (ListView) v.findViewById(R.id.shops_list);
+        ListView listview = (ListView) v.findViewById(R.id.categories_list);
         listview.setAdapter(adapter);
         
         listview.setOnItemClickListener(new OnItemClickListener() {
@@ -71,11 +68,11 @@ public class ShopsFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {				
 
-				SalesFragment fragment = new SalesFragment();
+				ShopsFragment fragment = new ShopsFragment(); 
 				TextView tv_id = (TextView) view.findViewById(R.id.id);
-		        
+				
 				Singleton storage=(Singleton) getActivity().getApplication();
-				fragment.sales=storage.getSalesListByCategory(Integer.parseInt(tv_id.getText().toString()));
+				fragment.shops=storage.getShopsListByCategory(Integer.parseInt(tv_id.getText().toString()));
 				
 		        FragmentManager fragmentManager = getFragmentManager();
 		        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
@@ -83,15 +80,13 @@ public class ShopsFragment extends Fragment {
 			}
 		});
         
-        getActivity().setTitle("Магазины");
+        getActivity().setTitle("Категории");
         return v;
     }
     
-    public void getShopsbyCategory(int id){
-   	
-    	shops=new ArrayList<Shop>();  
-    	Singleton storage=(Singleton)this.getActivity().getApplicationContext();
-    	shops=storage.getShopsList();
+    public void getAllShops(){
+//    	//Log.v("SalesFragment", "hi");    	
+//    	Sales=new ArrayList<Sale>();  
 //    	
 //    	Sales.add(new Sale().Sale_test(1, "Amazon"  , "desc 1"));   
 //    	Sales.add(new Sale().Sale_test(2, "Ebay"   , "desc 2"));  
