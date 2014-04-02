@@ -2,6 +2,7 @@ package com.sevensales;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -14,6 +15,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
 
 public class ServiceHandler {
 
@@ -83,6 +89,134 @@ public class ServiceHandler {
 		
 		return response;
 
+	}
+	
+	public void getSalesList(String jsonStr, ArrayList<Sale> temp){
+		
+		JSONArray sales = null;
+		
+		if (jsonStr != null) {
+			try {
+				
+				JSONObject jsonObj = new JSONObject(jsonStr);
+				
+				if (jsonObj.getString("success")=="true") {
+					
+					sales=jsonObj.getJSONArray("sales");
+					
+					for (int i = 0; i < sales.length(); i++) {								
+						
+						JSONObject obj = new JSONObject();
+						
+						obj = sales.getJSONObject(i);
+						String id = obj.getString("id");
+						String name = obj.getString("name");
+						String short_name = obj.getString("short_name");
+						String shop_id = obj.getString("shop_id");
+						String shop_name = obj.getString("shop_name");
+						String date_start = obj.getString("date_start");
+						String date_end = obj.getString("date_end");
+						String left_sec = obj.getString("left_sec");
+						String img_small = obj.getString("img_small");
+						String img_big = obj.getString("img_big");
+					    
+						temp.add(new Sale(id,name,short_name,shop_id,shop_name,date_start,
+								date_end,left_sec,img_small,img_big));  
+					}	
+				}
+				
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Log.e("ServiceHandler", "Couldn't get any data from the url");
+		}
+		
+	}
+	
+	public void getShopsList(String jsonStr, ArrayList<Shop> temp){
+		
+		JSONArray shops = null;
+		JSONArray s_categories = null;
+		
+		if (jsonStr != null) {
+			try {
+				
+				JSONObject jsonObj = new JSONObject(jsonStr);
+				
+				if (jsonObj.getString("success")=="true") {
+					
+					shops=jsonObj.getJSONArray("shops");
+					
+					for (int i = 0; i < shops.length(); i++) {								
+						
+						JSONObject obj = new JSONObject();
+						
+						obj = shops.getJSONObject(i);
+						String s_id = obj.getString("id");
+						String s_name = obj.getString("name");
+						String s_sales = obj.getString("sales");
+						String s_img_url = obj.getString("img_url");
+						
+						s_categories= obj.getJSONArray("categories");
+						
+						Category[] temp_categories=new Category[s_categories.length()];
+						
+						for (int j = 0; j < s_categories.length(); j++) {		
+							JSONObject c_obj = new JSONObject();
+							c_obj=s_categories.getJSONObject(j);
+							String s_c_id = c_obj.getString("id");
+							String s_c_name = c_obj.getString("name");									
+							temp_categories[j]=new Category(s_c_id,s_c_name);															
+						}
+					   
+						temp.add(new Shop(s_id,s_name,s_sales,s_img_url,temp_categories));  
+					}	
+				}
+				
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Log.e("ServiceHandler", "Couldn't get any data from the url");
+		}
+		
+	}
+	
+	public void getCategoriesList(String jsonStr, ArrayList<Category> temp){
+		
+		JSONArray categories = null;
+		
+		if (jsonStr != null) {
+			try {
+				
+				JSONObject jsonObj = new JSONObject(jsonStr);
+				
+				if (jsonObj.getString("success")=="true") {
+					
+					categories=jsonObj.getJSONArray("categories");
+					
+					for (int i = 0; i < categories.length(); i++) {								
+						
+						JSONObject obj = new JSONObject();
+						
+						obj = categories.getJSONObject(i);
+						String c_id = obj.getString("id");
+						String c_name = obj.getString("name");	
+						
+						//Log.d("Cate:" + c_id,c_name+" ");
+						
+					   
+						temp.add(new Category(c_id,c_name));  
+					}	
+				}
+				
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Log.e("ServiceHandler", "Couldn't get any data from the url");
+		}	
 	}
 }
 

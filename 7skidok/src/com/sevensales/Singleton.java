@@ -31,15 +31,6 @@ public final class Singleton extends Application {
 	private Context appContext;
 	private FragmentManager appFragmentManager;
 	
-	private JSONArray sales = null;
-	private JSONObject sale = null;	
-	
-	private JSONArray shops = null;
-	private JSONArray s_categories = null;
-	private JSONObject shop = null;	
-	
-	private JSONArray categories = null;
-	
 	public ArrayList<Sale> sales_list=new ArrayList<Sale>();
 	public ArrayList<Shop> shops_list=new ArrayList<Shop>();
 	public ArrayList<Category> categories_list=new ArrayList<Category>();
@@ -161,57 +152,8 @@ public final class Singleton extends Application {
 			@Override
 			protected Void doInBackground(Void... arg0) {				
 				ServiceHandler sh = new ServiceHandler();
-				String jsonStr = sh.makeServiceCall(getSalesUrl(), ServiceHandler.GET);				
-
-				if (jsonStr != null) {
-					try {
-						
-						JSONObject jsonObj = new JSONObject(jsonStr);
-						
-						if (jsonObj.getString("success")=="true") {
-							
-							sales=jsonObj.getJSONArray("sales");
-							
-							for (int i = 0; i < sales.length(); i++) {								
-								
-								JSONObject obj = new JSONObject();
-								
-								obj = sales.getJSONObject(i);
-								String id = obj.getString("id");
-								String name = obj.getString("name");
-								String short_name = obj.getString("short_name");
-								String shop_id = obj.getString("shop_id");
-								String shop_name = obj.getString("shop_name");
-								String date_start = obj.getString("date_start");
-								String date_end = obj.getString("date_end");
-								String left_sec = obj.getString("left_sec");
-								String img_small = obj.getString("img_small");
-								String img_big = obj.getString("img_big");
-								
-//								Log.d("Sales_id:" + id,
-//										name+" "+
-//										short_name+" "+
-//										shop_name+" "+
-//										shop_id+" "+
-//										date_start+" "+
-//										date_end+" "+
-//										left_sec+" "+
-//										img_small+" "+
-//										img_big+" ");
-								
-							    
-								sales_list.add(new Sale(id,name,short_name,shop_id,shop_name,date_start,
-										date_end,left_sec,img_small,img_big));  
-							}	
-						}
-						
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				} else {
-					Log.e("ServiceHandler", "Couldn't get any data from the url");
-				}
-
+				String jsonStr = sh.makeServiceCall(getSalesUrl(), ServiceHandler.GET);	
+				sh.getSalesList(jsonStr, sales_list);
 				return null;
 			}
 
@@ -232,75 +174,14 @@ public final class Singleton extends Application {
 
 			@Override
 			protected void onPreExecute() {
-				super.onPreExecute();				
-//				pDialog = new ProgressDialog(appContext);
-//				pDialog.setMessage("Идет загрузка данных...");
-//				pDialog.setCancelable(false);				
-//				pDialog.show();
-
+				super.onPreExecute();
 			}
 
 			@Override
 			protected Void doInBackground(Void... arg0) {				
 				ServiceHandler sh = new ServiceHandler();
 				String jsonStr = sh.makeServiceCall(getShopsUrl(), ServiceHandler.GET);				
-
-				if (jsonStr != null) {
-					try {
-						
-						JSONObject jsonObj = new JSONObject(jsonStr);
-						
-						if (jsonObj.getString("success")=="true") {
-							
-							shops=jsonObj.getJSONArray("shops");
-							
-							for (int i = 0; i < shops.length(); i++) {								
-								
-								JSONObject obj = new JSONObject();
-								
-								obj = shops.getJSONObject(i);
-								String s_id = obj.getString("id");
-								String s_name = obj.getString("name");
-								String s_sales = obj.getString("sales");
-								String s_img_url = obj.getString("img_url");
-								
-								s_categories= obj.getJSONArray("categories");
-								
-								Category[] temp_categories=new Category[s_categories.length()];
-								
-								for (int j = 0; j < s_categories.length(); j++) {		
-									JSONObject c_obj = new JSONObject();
-									c_obj=s_categories.getJSONObject(j);
-									String s_c_id = c_obj.getString("id");
-									String s_c_name = c_obj.getString("name");									
-									temp_categories[j]=new Category(s_c_id,s_c_name);
-									
-									//Log.d("Categories:" + s_id,s_c_id+" "+s_c_name+" ");									
-								}
-								
-//								Log.d("Sales_id:" + id,
-//										name+" "+
-//										short_name+" "+
-//										shop_name+" "+
-//										shop_id+" "+
-//										date_start+" "+
-//										date_end+" "+
-//										left_sec+" "+
-//										img_small+" "+
-//										img_big+" ");
-								
-							   
-								shops_list.add(new Shop(s_id,s_name,s_sales,s_img_url,temp_categories));  
-							}	
-						}
-						
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				} else {
-					Log.e("ServiceHandler", "Couldn't get any data from the url");
-				}
-
+				sh.getShopsList(jsonStr, shops_list);
 				return null;
 			}
 
@@ -318,50 +199,14 @@ public final class Singleton extends Application {
 
 			@Override
 			protected void onPreExecute() {
-				super.onPreExecute();				
-//				pDialog = new ProgressDialog(appContext);
-//				pDialog.setMessage("Идет загрузка данных...");
-//				pDialog.setCancelable(false);				
-//				pDialog.show();
-
+				super.onPreExecute();
 			}
 
 			@Override
 			protected Void doInBackground(Void... arg0) {				
 				ServiceHandler sh = new ServiceHandler();
 				String jsonStr = sh.makeServiceCall(getCategoriesUrl(), ServiceHandler.GET);				
-
-				if (jsonStr != null) {
-					try {
-						
-						JSONObject jsonObj = new JSONObject(jsonStr);
-						
-						if (jsonObj.getString("success")=="true") {
-							
-							categories=jsonObj.getJSONArray("categories");
-							
-							for (int i = 0; i < categories.length(); i++) {								
-								
-								JSONObject obj = new JSONObject();
-								
-								obj = categories.getJSONObject(i);
-								String c_id = obj.getString("id");
-								String c_name = obj.getString("name");	
-								
-								//Log.d("Cate:" + c_id,c_name+" ");
-								
-							   
-								categories_list.add(new Category(c_id,c_name));  
-							}	
-						}
-						
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				} else {
-					Log.e("ServiceHandler", "Couldn't get any data from the url");
-				}
-
+				sh.getCategoriesList(jsonStr,categories_list);
 				return null;
 			}
 

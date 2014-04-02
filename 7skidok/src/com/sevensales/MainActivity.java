@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mPlanetTitles;
+    private String[] mElementsTitles;
     
     public Singleton storage;
 
@@ -100,7 +100,7 @@ public class MainActivity extends Activity {
 //      Log.d("your context MAin--> ", getApplicationContext().toString());
 
         mTitle = mDrawerTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+        mElementsTitles = getResources().getStringArray(R.array.left_menu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
+                R.layout.drawer_list_item, mElementsTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -287,7 +287,7 @@ public class MainActivity extends Activity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_planet, container, false);
             int i = getArguments().getInt(ARG_PLANET_NUMBER);
-            String planet = getResources().getStringArray(R.array.planets_array)[i];
+            String planet = getResources().getStringArray(R.array.left_menu)[i];
 
             int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
                             "drawable", getActivity().getPackageName());
