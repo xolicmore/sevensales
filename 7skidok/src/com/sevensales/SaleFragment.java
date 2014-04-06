@@ -56,7 +56,7 @@ public class SaleFragment extends Fragment {
     	 tv_name.setText(sale.name);
     	 tv_short_name.setText(sale.short_name);
     	 tv_shop_name.setText(sale.shop_name);
-    	 tv_shop_id.setText(String.valueOf(shop_id));
+    	 tv_shop_id.setText(String.valueOf(sale.shop_id));
     	 tv_date_start.setText(sale.date_start);
     	 tv_date_end.setText(sale.date_end);
     	 tv_left_sec.setText(sale.left_sec);

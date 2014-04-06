@@ -1,5 +1,6 @@
 package com.sevensales;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -19,16 +20,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.widget.Toast;
 
 public class ServiceHandler {
 
 	static String response = null;
 	public final static int GET = 1;
 	public final static int POST = 2;
+	
+	Context appContext;
 
-	public ServiceHandler() {
-
+	public ServiceHandler(Context c) {
+		this.appContext=c;
 	}
 
 	/*
@@ -157,7 +163,6 @@ public class ServiceHandler {
 						String s_name = obj.getString("name");
 						String s_sales = obj.getString("sales");
 						String s_img_url = obj.getString("img_url");
-						
 						s_categories= obj.getJSONArray("categories");
 						
 						Category[] temp_categories=new Category[s_categories.length()];
@@ -170,7 +175,9 @@ public class ServiceHandler {
 							temp_categories[j]=new Category(s_c_id,s_c_name);															
 						}
 					   
-						temp.add(new Shop(s_id,s_name,s_sales,s_img_url,temp_categories));  
+						temp.add(new Shop(s_id,s_name,s_sales,s_img_url,temp_categories));
+						loadImage(s_img_url);
+						
 					}	
 				}
 				
@@ -217,6 +224,11 @@ public class ServiceHandler {
 		} else {
 			Log.e("ServiceHandler", "Couldn't get any data from the url");
 		}	
+	}
+	
+	private void loadImage(String url){
+			ImageLoader imgLoader=new ImageLoader(appContext);
+			imgLoader.getImageFromUrl(url);
 	}
 }
 

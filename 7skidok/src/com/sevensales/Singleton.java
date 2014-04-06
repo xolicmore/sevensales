@@ -151,7 +151,7 @@ public final class Singleton extends Application {
 
 			@Override
 			protected Void doInBackground(Void... arg0) {				
-				ServiceHandler sh = new ServiceHandler();
+				ServiceHandler sh = new ServiceHandler(appContext);
 				String jsonStr = sh.makeServiceCall(getSalesUrl(), ServiceHandler.GET);	
 				sh.getSalesList(jsonStr, sales_list);
 				return null;
@@ -179,7 +179,7 @@ public final class Singleton extends Application {
 
 			@Override
 			protected Void doInBackground(Void... arg0) {				
-				ServiceHandler sh = new ServiceHandler();
+				ServiceHandler sh = new ServiceHandler(appContext);
 				String jsonStr = sh.makeServiceCall(getShopsUrl(), ServiceHandler.GET);				
 				sh.getShopsList(jsonStr, shops_list);
 				return null;
@@ -204,7 +204,7 @@ public final class Singleton extends Application {
 
 			@Override
 			protected Void doInBackground(Void... arg0) {				
-				ServiceHandler sh = new ServiceHandler();
+				ServiceHandler sh = new ServiceHandler(appContext);
 				String jsonStr = sh.makeServiceCall(getCategoriesUrl(), ServiceHandler.GET);				
 				sh.getCategoriesList(jsonStr,categories_list);
 				return null;

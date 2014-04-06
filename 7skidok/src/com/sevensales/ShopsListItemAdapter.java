@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,11 +15,13 @@ public class ShopsListItemAdapter extends BaseAdapter{
 	private ArrayList<Shop> items;
     private Context context;
     private int numItems = 0;
+    private ImageLoader imgLoader;
 
     public ShopsListItemAdapter(final ArrayList<Shop> items, Context context) {
         this.items = items;
         this.context = context;
         this.numItems = items.size();
+        this.imgLoader = new ImageLoader(context);
     }
  
     public int getCount() {
@@ -52,6 +55,12 @@ public class ShopsListItemAdapter extends BaseAdapter{
         
         TextView tv_img_url = (TextView) itemLayout.findViewById(R.id.img_url);
         tv_img_url.setText(item.img_url);
+        
+        ImageView iv_image = (ImageView) itemLayout.findViewById(R.id.image);
+        
+		imgLoader.DisplayImage(item.img_url, 1, iv_image);
+        
+        
         
         
         
