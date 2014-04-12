@@ -98,9 +98,11 @@ public final class Singleton extends Application {
 	  public ArrayList<Sale> getSalesListByCategory(int id){
 		  ArrayList<Sale> templist=new ArrayList<Sale>();
 		   for(Sale s : sales_list){
-			  if (s.shop_id==id){
-				  templist.add(s);
-			  }	          
+			   for(Category c : s.categories){
+	       	          if (c.id==id){
+	       	        	  templist.add(s);
+	       	          } 
+			   }       
 		    }		
 		  return templist;
 	  }

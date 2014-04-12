@@ -36,10 +36,7 @@ public class CategoriesListItemAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {       
         final Category item = items.get(position);
         final LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.categories_list_item, parent, false);
-          
-        TextView tv_id = (TextView) itemLayout.findViewById(R.id.id);
-        tv_id.setText(String.valueOf(item.id));
-        
+         
         TextView tv_name = (TextView) itemLayout.findViewById(R.id.name);
         tv_name.setText(item.name);
         return itemLayout;        

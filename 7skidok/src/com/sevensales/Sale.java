@@ -12,13 +12,14 @@ public class Sale {
 	public String left_sec;
 	public String img_small;
 	public String img_big;
+	public Category[] categories;
 	
 	public String description;	
 	
 	public Sale() {}
 	public Sale(String id,String name,String short_name,
 			String shop_id,String shop_name,String date_start,
-			String date_end,String left_sec,String img_small,String img_big) {
+			String date_end,String left_sec,String img_small,String img_big,Category[] categories) {
 		
 		this.id=Integer.parseInt(id);		
 		this.name=name;
@@ -31,6 +32,7 @@ public class Sale {
 		this.img_small=img_small;
 		this.img_big=img_big;
 		this.description=name;
+		this.categories=categories;
 	};
 		
 	
@@ -43,6 +45,10 @@ public class Sale {
 		this.description=description;
 		
 		return this;
+	}
+	
+	public void setCategories(Category[] a){
+		this.categories=a;
 	}
 	
 

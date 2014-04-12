@@ -38,7 +38,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class ShopsFragment extends Fragment {
     public static final String ARG_PLANET_NUMBER = "planet_number";
     
-    public ArrayList<Sale> Sales;
+    public ArrayList<Sale> sales;
     
     public ArrayList<Shop> shops;
     

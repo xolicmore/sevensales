@@ -44,27 +44,18 @@ public class ShopsListItemAdapter extends BaseAdapter{
         //ImageView imgIcon = (ImageView) itemLayout.findViewById(R.id.imgIcon);
         // imgIcon.setImageDrawable(item.getPicture());        
         
-        TextView tv_id = (TextView) itemLayout.findViewById(R.id.id);
-        tv_id.setText(String.valueOf(item.id));
+        
         
         TextView tv_name = (TextView) itemLayout.findViewById(R.id.name);
         tv_name.setText(item.name);
 
         TextView tv_sales = (TextView) itemLayout.findViewById(R.id.sales);
-        tv_sales.setText(String.valueOf(item.sales));
-        
-        TextView tv_img_url = (TextView) itemLayout.findViewById(R.id.img_url);
-        tv_img_url.setText(item.img_url);
+        tv_sales.append(String.valueOf(item.sales));
         
         ImageView iv_image = (ImageView) itemLayout.findViewById(R.id.image);
         
 		imgLoader.DisplayImage(item.img_url, 1, iv_image);
-        
-        
-        
-        
-        
-          return itemLayout;
-        
+		
+        return itemLayout;
     }
 }

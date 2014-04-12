@@ -100,6 +100,7 @@ public class ServiceHandler {
 	public void getSalesList(String jsonStr, ArrayList<Sale> temp){
 		
 		JSONArray sales = null;
+		JSONArray s_categories = null;
 		
 		if (jsonStr != null) {
 			try {
@@ -125,9 +126,21 @@ public class ServiceHandler {
 						String left_sec = obj.getString("left_sec");
 						String img_small = obj.getString("img_small");
 						String img_big = obj.getString("img_big");
+						
+						s_categories= obj.getJSONArray("categories");
+						
+						Category[] temp_categories=new Category[s_categories.length()];
+						
+						for (int j = 0; j < s_categories.length(); j++) {		
+							JSONObject c_obj = new JSONObject();
+							c_obj=s_categories.getJSONObject(j);
+							String s_c_id = c_obj.getString("id");
+							String s_c_name = c_obj.getString("name");									
+							temp_categories[j]=new Category(s_c_id,s_c_name);															
+						}
 					    
 						temp.add(new Sale(id,name,short_name,shop_id,shop_name,date_start,
-								date_end,left_sec,img_small,img_big));  
+								date_end,left_sec,img_small,img_big,temp_categories));  
 					}	
 				}
 				

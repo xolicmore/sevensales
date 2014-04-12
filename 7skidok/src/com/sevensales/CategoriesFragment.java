@@ -68,11 +68,11 @@ public class CategoriesFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {				
 
-				ShopsFragment fragment = new ShopsFragment(); 
+				SalesFragment fragment = new SalesFragment(); 
 				TextView tv_id = (TextView) view.findViewById(R.id.id);
 				
 				Singleton storage=(Singleton) getActivity().getApplication();
-				fragment.shops=storage.getShopsListByCategory(Integer.parseInt(tv_id.getText().toString()));
+				fragment.sales=storage.getSalesListByCategory(Integer.parseInt(tv_id.getText().toString()));
 				
 		        FragmentManager fragmentManager = getFragmentManager();
 		        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
