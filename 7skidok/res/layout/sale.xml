@@ -38,8 +38,8 @@
       		android:layout_width="fill_parent"
       		android:layout_height="wrap_content"
       		android:layout_marginTop="5dp"
-      		android:textSize="15sp"
+      		android:textSize="20sp"
       		android:textColor="#ff0000"
-      		android:text="Начало: "
+      		android:text=""
       		android:textStyle="bold"/>
 </LinearLayout>

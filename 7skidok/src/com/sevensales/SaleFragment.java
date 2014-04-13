@@ -57,11 +57,29 @@ public class SaleFragment extends Fragment {
     	 new CountDownTimer(Integer.parseInt(sale.left_sec)*1000, 1000) {
     		 public void onTick(long millisUntilFinished) {
     			 int leftsec=(int)millisUntilFinished/1000;
-    			 int hours=(int) (leftsec/3600);
-    			 int min=(int) (leftsec/60%60);
-    			 int sec=(int)(leftsec%60);
     			 
-    			 tv_left_sec.setText("До окончания: " + hours + ":"+min+":"+sec);  
+    			 if ((leftsec<2600000)&&(leftsec>0)){
+    				 int days=(int) (leftsec/(3600*24));
+    				 int hours=(int) (leftsec/3600%24);
+        			 int min=(int) (leftsec/60%60);
+        			 int sec=(int)(leftsec%60);         			         	
+        			 
+        			 tv_left_sec.setText("До окончания: ");
+        			 
+        			 if (days!=0){
+        				 tv_left_sec.append(days+" дней - ");
+        			 }           			 
+        			
+        			 tv_left_sec.append(getTimeUnit(hours)+":"+getTimeUnit(min)+":"+getTimeUnit(sec));        			 
+        		 }
+    			
+    			 if (leftsec>0){
+    				 leftsec--;
+    				 sale.left_sec=String.valueOf(leftsec);    				 
+    			 }else{
+    				 tv_left_sec.setText("Срок действия скидки окончен");
+    			 }
+    			 
     			 
     		 }
     		 public void onFinish() {
@@ -82,6 +100,13 @@ public class SaleFragment extends Fragment {
         //s.getSalesUrl();
 
         return v;
+    }
+    
+    private String getTimeUnit(int n){
+    	if (n<10){
+    		return "0"+n;
+    	}else
+    	return String.valueOf(n);
     }
     
     @Override

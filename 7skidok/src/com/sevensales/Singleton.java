@@ -128,8 +128,8 @@ public final class Singleton extends Application {
 		  return categories_list;
 	  }
 	  
-	  public void downloadSales(){
-		  new GetDataSales().execute();			  
+	  public void downloadSales(){		  
+			  new GetDataSales().execute();		  	  			  
 	  }
 	  public void downloadShops(){
 		  new GetDataShops().execute();			  
@@ -137,6 +137,14 @@ public final class Singleton extends Application {
 	  public void downloadCategories(){
 		  new GetDataCategories().execute();			  
 	  }
+	  
+	  public void downloadData() {
+		  if (sales_list.isEmpty()){
+			  downloadCategories();
+		      downloadShops();
+		      downloadSales();
+		  }		  		
+	}
 	   
 
 		private class GetDataSales extends AsyncTask<Void, Void, Void> {

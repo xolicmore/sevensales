@@ -93,9 +93,7 @@ public class MainActivity extends Activity {
         storage=(Singleton) this.getApplication();
         storage.setContext(MainActivity.this);
         storage.setFragmentManager(getFragmentManager());
-        storage.downloadCategories();
-        storage.downloadShops();
-        storage.downloadSales();
+        storage.downloadData();       
         
 //      Toast.makeText(getApplicationContext()," main view", Toast.LENGTH_LONG).show();
 //      Log.d("your context MAin--> ", getApplicationContext().toString());
