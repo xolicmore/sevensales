@@ -46,34 +46,17 @@ public class SalesListItemAdapter extends BaseAdapter {
         final LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.sale_list_item, parent, false);
        
         //ImageView imgIcon = (ImageView) itemLayout.findViewById(R.id.imgIcon);
-        // imgIcon.setImageDrawable(item.getPicture());        
-        
-        TextView tv_id = (TextView) itemLayout.findViewById(R.id.id);
-        tv_id.setText(String.valueOf(item.id));
-        
-        TextView tv_name = (TextView) itemLayout.findViewById(R.id.name);
-        tv_name.setText(item.name);
-
-        TextView tv_short_name = (TextView) itemLayout.findViewById(R.id.short_name);
-        tv_short_name.setText(item.short_name);
-        
-        TextView tv_shop_name = (TextView) itemLayout.findViewById(R.id.shop_name);
-        tv_shop_name.setText(item.shop_name);
-        
-        TextView tv_shop_id = (TextView) itemLayout.findViewById(R.id.shop_id);
-        tv_shop_id.setText(String.valueOf(item.shop_id));
-        
-        TextView tv_date_start = (TextView) itemLayout.findViewById(R.id.date_start);
-        tv_date_start.setText(item.date_start);
+        // imgIcon.setImageDrawable(item.getPicture());   
+//        TextView tv_id = (TextView) itemLayout.findViewById(R.id.idqwe);
+//        tv_id.setText(item.id);
+//
+        TextView tv_short_name = (TextView) itemLayout.findViewById(R.id.name);
+        tv_short_name.setText(item.name);        
         
         TextView tv_date_end = (TextView) itemLayout.findViewById(R.id.date_end);
-        tv_date_end.setText(item.date_end);
+        tv_date_end.append(item.date_end);
         
-        TextView tv_left_sec = (TextView) itemLayout.findViewById(R.id.left_sec);
-        tv_left_sec.setText(item.left_sec);  
-        
-          return itemLayout;
-        
+          return itemLayout;        
     }
  
 }

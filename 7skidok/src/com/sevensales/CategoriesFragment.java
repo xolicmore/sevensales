@@ -69,7 +69,7 @@ public class CategoriesFragment extends Fragment {
 					int position, long id) {				
 
 				SalesFragment fragment = new SalesFragment(); 
-				TextView tv_id = (TextView) view.findViewById(R.id.id);
+				TextView tv_id = (TextView) view.findViewById(R.id.id_c);
 				
 				Singleton storage=(Singleton) getActivity().getApplication();
 				fragment.sales=storage.getSalesListByCategory(Integer.parseInt(tv_id.getText().toString()));

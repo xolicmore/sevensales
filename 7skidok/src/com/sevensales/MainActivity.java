@@ -95,7 +95,7 @@ public class MainActivity extends Activity {
         storage.setFragmentManager(getFragmentManager());
         storage.downloadCategories();
         storage.downloadShops();
-//        storage.downloadSales();
+        storage.downloadSales();
         
 //      Toast.makeText(getApplicationContext()," main view", Toast.LENGTH_LONG).show();
 //      Log.d("your context MAin--> ", getApplicationContext().toString());

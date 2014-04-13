@@ -44,7 +44,8 @@ public class ShopsListItemAdapter extends BaseAdapter{
         //ImageView imgIcon = (ImageView) itemLayout.findViewById(R.id.imgIcon);
         // imgIcon.setImageDrawable(item.getPicture());        
         
-        
+        TextView tv_id = (TextView) itemLayout.findViewById(R.id.id_s);
+        tv_id.setText(String.valueOf(item.id));
         
         TextView tv_name = (TextView) itemLayout.findViewById(R.id.name);
         tv_name.setText(item.name);

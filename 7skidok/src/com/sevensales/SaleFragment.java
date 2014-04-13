@@ -9,6 +9,7 @@ import com.sevensales.R;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,8 @@ public class SaleFragment extends Fragment {
 	public String left_sec;
 	public String img_small;
 	public String img_big;
-    
+	public TextView tv_left_sec;
+	 
     public SaleFragment() {
         // Empty constructor required for fragment subclasses
     }
@@ -43,22 +45,35 @@ public class SaleFragment extends Fragment {
     	
     	 View v = inflater.inflate(R.layout.sale, container, false);  
     	 
-    	 TextView tv_id=(TextView) v.findViewById(R.id.id);
+    	 
     	 TextView tv_name=(TextView) v.findViewById(R.id.name);
-    	 TextView tv_short_name=(TextView) v.findViewById(R.id.short_name);
+    	 
     	 TextView tv_shop_name=(TextView) v.findViewById(R.id.shop_name);
-    	 TextView tv_shop_id=(TextView) v.findViewById(R.id.shop_id);
+    	 
     	 TextView tv_date_start=(TextView) v.findViewById(R.id.date_start);
     	 TextView tv_date_end=(TextView) v.findViewById(R.id.date_end);
-    	 TextView tv_left_sec=(TextView) v.findViewById(R.id.left_sec);
+    	 tv_left_sec=(TextView) v.findViewById(R.id.left_sec);
     	 
-    	 tv_id.setText(String.valueOf(sale.id));
+    	 new CountDownTimer(Integer.parseInt(sale.left_sec)*1000, 1000) {
+    		 public void onTick(long millisUntilFinished) {
+    			 int leftsec=(int)millisUntilFinished/1000;
+    			 int hours=(int) (leftsec/3600);
+    			 int min=(int) (leftsec/60%60);
+    			 int sec=(int)(leftsec%60);
+    			 
+    			 tv_left_sec.setText("До окончания: " + hours + ":"+min+":"+sec);  
+    			 
+    		 }
+    		 public void onFinish() {
+    			 tv_left_sec.setText("Действие скидки окончено!");
+    		 }
+    		}.start();
     	 tv_name.setText(sale.name);
-    	 tv_short_name.setText(sale.short_name);
-    	 tv_shop_name.setText(sale.shop_name);
-    	 tv_shop_id.setText(String.valueOf(sale.shop_id));
-    	 tv_date_start.setText(sale.date_start);
-    	 tv_date_end.setText(sale.date_end);
+    	 
+    	 tv_shop_name.append(sale.shop_name);
+    	 
+    	 tv_date_start.append(sale.date_start);
+    	 tv_date_end.append(sale.date_end);
     	 tv_left_sec.setText(sale.left_sec);
     	 
     	 

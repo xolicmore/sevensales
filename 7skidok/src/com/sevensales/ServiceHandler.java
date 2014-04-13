@@ -110,7 +110,7 @@ public class ServiceHandler {
 				if (jsonObj.getString("success")=="true") {
 					
 					sales=jsonObj.getJSONArray("sales");
-					
+					//sales.length()
 					for (int i = 0; i < sales.length(); i++) {								
 						
 						JSONObject obj = new JSONObject();
