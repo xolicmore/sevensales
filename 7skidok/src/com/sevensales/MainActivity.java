@@ -211,8 +211,7 @@ public class MainActivity extends Activity {
     	
     	if (0==position) {    		
     		SalesFragment fragment = new SalesFragment();
-    		fragment.sales=storage.getSalesList();
-    		
+    		fragment.sales=storage.getSalesList();    		
     		
     		FragmentManager fragmentManager = getFragmentManager();
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -222,8 +221,7 @@ public class MainActivity extends Activity {
     	
     	if (1==position) {    		
     		ShopsFragment fragment = new ShopsFragment();
-    		fragment.shops=storage.getShopsList();
-    		   		 
+    		fragment.shops=storage.getShopsList();    		   		 
     		
     		FragmentManager fragmentManager = getFragmentManager();
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -233,10 +231,18 @@ public class MainActivity extends Activity {
     	
     	if (2==position) {    		
     		CategoriesFragment fragment = new CategoriesFragment();
-    		fragment.categories=storage.getCategoriesList();
-    		   		 
+    		fragment.categories=storage.getCategoriesList();    		   		 
     		
     		FragmentManager fragmentManager = getFragmentManager();
+	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+	        mDrawerList.setItemChecked(position, true);	        
+	        mDrawerLayout.closeDrawer(mDrawerList);
+    	}
+    	
+    	if (3==position) {    		
+    		SettingsFragment fragment = new SettingsFragment(); 
+    		
+    		FragmentManager fragmentManager = getFragmentManager();    		
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	        mDrawerList.setItemChecked(position, true);	        
 	        mDrawerLayout.closeDrawer(mDrawerList);

@@ -58,7 +58,7 @@ public class SaleFragment extends Fragment {
     		 public void onTick(long millisUntilFinished) {
     			 int leftsec=(int)millisUntilFinished/1000;
     			 
-    			 if ((leftsec<2600000)&&(leftsec>0)){
+    			 if ((leftsec<604800)&&(leftsec>0)){
     				 int days=(int) (leftsec/(3600*24));
     				 int hours=(int) (leftsec/3600%24);
         			 int min=(int) (leftsec/60%60);
