@@ -25,27 +25,18 @@ import android.widget.SimpleAdapter;
 
 public final class Singleton extends Application {
 	private ProgressDialog pDialog;
-	private static String sales_url = "http://7skidok.ru/api/?action=sales";
+	private static String sales_url = "http://7skidok.ru/api/?action=sales";	
 	private static String shops_url = "http://7skidok.ru/api/?action=shops";
 	private static String categories_url = "http://7skidok.ru/api/?action=sale_categories";
 	private Context appContext;
 	private FragmentManager appFragmentManager;
 	
 	public ArrayList<Sale> sales_list=new ArrayList<Sale>();
+	public ArrayList<Sale> temp_sales_list=new ArrayList<Sale>();
 	public ArrayList<Shop> shops_list=new ArrayList<Shop>();
 	public ArrayList<Category> categories_list=new ArrayList<Category>();
-//	private MyClass m_A = new MyClass();
-//	@Override
-//	
-//	  public void onCreate() {	
-//	     super.onCreate();		     	
-//	     Resources r = this.getResources(); 
-//	  }	
-//	 
-//	
-//	  private MyClass getA() {	
-//	    return m_A;	
-//	  }
+	
+	public String keyword = "";
 	  
 	  private int data=200;
 	  
@@ -71,7 +62,8 @@ public final class Singleton extends Application {
 	  }
 	  
 	  public String getSalesUrl(){		  
-		  String url= sales_url+"&uid="+getDeviceId(); 		  
+		  keyword = keyword.replace("%", "%25");
+		  String url= sales_url+"&uid="+getDeviceId()+"&keyword="+keyword; 		  
 		  return url;
 	  }
 	  
@@ -86,12 +78,6 @@ public final class Singleton extends Application {
 	  }
 	  
 	  public ArrayList<Sale> getSalesList(){	
-//		  sales_list.add(new Sale("1","test app1","test","7","shop test","111",
-//					"999","111","none","none big"));
-//		  sales_list.add(new Sale("9","test app3","test","7","shop test","111",
-//					"555","999","none","none big"));
-//		  sales_list.add(new Sale("4","test app2","test","7","shop test","111",
-//					"111","333","none","none big"));
 		  return sales_list;
 	  }
 	
@@ -128,7 +114,23 @@ public final class Singleton extends Application {
 		  return categories_list;
 	  }
 	  
-	  public void downloadSales(){		  
+	@SuppressWarnings("unchecked")
+	public void refreshSalesList(){
+			 if (!temp_sales_list.isEmpty()) {
+				 // sales_list=temp_sales_list;
+				  sales_list.clear();
+				  sales_list=(ArrayList<Sale>)temp_sales_list.clone();
+				  temp_sales_list.clear();			
+			  }
+	}
+	  
+	@SuppressWarnings("unchecked")
+	public void downloadSales(){
+		  if (!sales_list.isEmpty()) {
+			  temp_sales_list = (ArrayList<Sale>) sales_list.clone();			  
+			  sales_list.clear();
+			  //Log.d("1",String.valueOf(temp_sales_list.size()));
+		  }
 			  new GetDataSales().execute();		  	  			  
 	  }
 	  public void downloadShops(){

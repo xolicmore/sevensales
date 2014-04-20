@@ -28,6 +28,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 /**
@@ -144,6 +146,31 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        
+     //   SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_websearch).getActionView();
+//        if (null != searchView) {
+//            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//            searchView.setIconifiedByDefault(false);
+//        }
+        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            public boolean onQueryTextChange(String newText) {                
+                return true;
+            }
+
+            public boolean onQueryTextSubmit(String query) {
+            	storage.keyword=query;            	           	
+            	storage.downloadSales(); 
+            	SalesFragment fragment = new SalesFragment(); 
+        		fragment.sales=storage.getSalesList();    		
+        		
+        		FragmentManager fragmentManager = getFragmentManager();
+    	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            	return true;
+            }
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
+        
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -166,15 +193,15 @@ public class MainActivity extends Activity {
         // Handle action buttons
         switch(item.getItemId()) {
         case R.id.action_websearch:
-            // create intent to perform web search for this planet
-            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-            intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
+             
+//        	  Intent intent = new Intent(Intent.ACTION_SEARCH);
+//              intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
             // catch event that there's no activity to handle intent
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-            }
+//            if (intent.resolveActivity(getPackageManager()) != null) {
+//                startActivity(intent);
+//            } else {
+              //  Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+            //}
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -192,6 +219,9 @@ public class MainActivity extends Activity {
     private void selectItem(int position) {
         // update the main content by replacing fragments
     	getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    	storage.refreshSalesList();
+    	//Log.d("q",String.valueOf(storage.sales_list.size()));
+    	
     	//Toast.makeText(this,String.valueOf(getFragmentManager().getBackStackEntryCount()), Toast.LENGTH_LONG).show();getFragmentManager().getBackStackEntryCount();
 	        
 //    	if (position!=0){
@@ -210,7 +240,7 @@ public class MainActivity extends Activity {
 //    	}
     	
     	if (0==position) {    		
-    		SalesFragment fragment = new SalesFragment();
+    		SalesFragment fragment = new SalesFragment();    		
     		fragment.sales=storage.getSalesList();    		
     		
     		FragmentManager fragmentManager = getFragmentManager();
