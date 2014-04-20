@@ -58,7 +58,7 @@ public class SaleFragment extends Fragment {
     		 public void onTick(long millisUntilFinished) {
     			 int leftsec=(int)millisUntilFinished/1000;
     			 
-    			 if ((leftsec<604800)&&(leftsec>0)){
+    			 if ((leftsec<1600000)&&(leftsec>0)){
     				 int days=(int) (leftsec/(3600*24));
     				 int hours=(int) (leftsec/3600%24);
         			 int min=(int) (leftsec/60%60);
@@ -71,6 +71,9 @@ public class SaleFragment extends Fragment {
         			 }           			 
         			
         			 tv_left_sec.append(getTimeUnit(hours)+":"+getTimeUnit(min)+":"+getTimeUnit(sec));        			 
+        		 }else{
+        			 tv_left_sec.setText("");
+        			 tv_left_sec.setVisibility(-1);
         		 }
     			
     			 if (leftsec>0){
