@@ -158,9 +158,8 @@ public class MainActivity extends Activity {
                 return true;
             }
 
-            public boolean onQueryTextSubmit(String query) {
-            	storage.keyword=query;            	           	
-            	storage.downloadSales(); 
+            public boolean onQueryTextSubmit(String query) {            	          	           	
+            	storage.downloadSearchShops(query);
             	SalesFragment fragment = new SalesFragment(); 
         		fragment.sales=storage.getSalesList();    		
         		
@@ -219,7 +218,7 @@ public class MainActivity extends Activity {
     private void selectItem(int position) {
         // update the main content by replacing fragments
     	getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    	storage.refreshSalesList();
+    	//storage.refreshSalesList();
     	//Log.d("q",String.valueOf(storage.sales_list.size()));
     	
     	//Toast.makeText(this,String.valueOf(getFragmentManager().getBackStackEntryCount()), Toast.LENGTH_LONG).show();getFragmentManager().getBackStackEntryCount();

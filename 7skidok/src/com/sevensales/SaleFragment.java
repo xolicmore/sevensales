@@ -10,6 +10,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,48 +55,49 @@ public class SaleFragment extends Fragment {
     	 TextView tv_date_end=(TextView) v.findViewById(R.id.date_end);
     	 tv_left_sec=(TextView) v.findViewById(R.id.left_sec);
     	 
-    	 new CountDownTimer(Integer.parseInt(sale.left_sec)*1000, 1000) {
-    		 public void onTick(long millisUntilFinished) {
-    			 int leftsec=(int)millisUntilFinished/1000;
-    			 
-    			 if ((leftsec<1600000)&&(leftsec>0)){
-    				 int days=(int) (leftsec/(3600*24));
-    				 int hours=(int) (leftsec/3600%24);
-        			 int min=(int) (leftsec/60%60);
-        			 int sec=(int)(leftsec%60);         			         	
-        			 
-        			 tv_left_sec.setText("До окончания: ");
-        			 
-        			 if (days!=0){
-        				 tv_left_sec.append(days+" дней - ");
-        			 }           			 
-        			
-        			 tv_left_sec.append(getTimeUnit(hours)+":"+getTimeUnit(min)+":"+getTimeUnit(sec));        			 
-        		 }else{
-        			 tv_left_sec.setText("");
-        			 tv_left_sec.setVisibility(-1);
-        		 }
-    			
-    			 if (leftsec>0){
-    				 leftsec--;
-    				 sale.left_sec=String.valueOf(leftsec);    				 
-    			 }else{
-    				 tv_left_sec.setText("Срок действия скидки окончен");
-    			 }
-    			 
-    			 
-    		 }
-    		 public void onFinish() {
-    			 tv_left_sec.setText("Действие скидки окончено!");
-    		 }
-    		}.start();
+    	 if (Integer.parseInt(sale.left_sec)<1209600) {
+	    	 new CountDownTimer(Integer.parseInt(sale.left_sec)*1000, 1000) {
+	    		 public void onTick(long millisUntilFinished) {
+	    			 int leftsec=(int)millisUntilFinished/1000;
+	//    			 Log.d("qwe", String.valueOf(leftsec));
+	    			 if (leftsec>0){
+	    				 int days=(int) (leftsec/(3600*24));
+	    				 int hours=(int) (leftsec/3600%24);
+	        			 int min=(int) (leftsec/60%60);
+	        			 int sec=(int)(leftsec%60);         			         	
+	        			 
+	        			 tv_left_sec.setText("До окончания: ");
+	        			 
+	        			 if (days!=0){
+	        				 tv_left_sec.append(days+" дней - ");
+	        			 }           			 
+	        			
+	        			 tv_left_sec.append(getTimeUnit(hours)+":"+getTimeUnit(min)+":"+getTimeUnit(sec));        			 
+	        		 }else{
+	        			 tv_left_sec.setText("");
+	        			 tv_left_sec.setVisibility(-1);
+	        		 }
+	    			
+	    			 if (leftsec>0){
+	    				 leftsec--;
+	    				 sale.left_sec=String.valueOf(leftsec);    				 
+	    			 }    			 
+	    		 }
+	    		 public void onFinish() { 
+	    			 sale.left_sec=String.valueOf(0); 
+	    			 tv_left_sec.setText("Срок действия скидки окончен");
+	    		 }
+	    		}.start();
+    	 }
+    		
     	 tv_name.setText(sale.name);
     	 
     	 tv_shop_name.append(sale.shop_name);
     	 
     	 tv_date_start.append(sale.date_start);
     	 tv_date_end.append(sale.date_end);
-    	 tv_left_sec.setText(sale.left_sec);
+    		 
+    	 //tv_left_sec.setText(sale.left_sec);
     	 
     	 
         getActivity().setTitle("Скидка");        

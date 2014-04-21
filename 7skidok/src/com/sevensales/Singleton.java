@@ -32,7 +32,7 @@ public final class Singleton extends Application {
 	private FragmentManager appFragmentManager;
 	
 	public ArrayList<Sale> sales_list=new ArrayList<Sale>();
-	public ArrayList<Sale> temp_sales_list=new ArrayList<Sale>();
+	public ArrayList<Sale> search_sales_list=new ArrayList<Sale>();
 	public ArrayList<Shop> shops_list=new ArrayList<Shop>();
 	public ArrayList<Category> categories_list=new ArrayList<Category>();
 	
@@ -61,7 +61,12 @@ public final class Singleton extends Application {
 		  return device_uuid;
 	  }
 	  
-	  public String getSalesUrl(){		  
+	  public String getSalesUrl(){	
+		  String url= sales_url+"&uid="+getDeviceId();	  
+		  return url;
+	  }
+	  
+	  public String getSearchSalesUrl(){		  
 		  keyword = keyword.replace("%", "%25");
 		  String url= sales_url+"&uid="+getDeviceId()+"&keyword="+keyword; 		  
 		  return url;
@@ -80,6 +85,20 @@ public final class Singleton extends Application {
 	  public ArrayList<Sale> getSalesList(){	
 		  return sales_list;
 	  }
+	  
+	  public ArrayList<Sale> getSearchSalesList(){	
+		  return search_sales_list;
+	  }
+	  
+	  public ArrayList<Sale> getSalesListByShop(int id){
+		  ArrayList<Sale> templist=new ArrayList<Sale>();
+		   for(Sale s : sales_list){
+				  if (s.shop_id==id){
+					  templist.add(s);	       	          
+			   }       
+		    }		
+		  return templist;
+	  }
 	
 	  public ArrayList<Sale> getSalesListByCategory(int id){
 		  ArrayList<Sale> templist=new ArrayList<Sale>();
@@ -96,8 +115,7 @@ public final class Singleton extends Application {
 	  public ArrayList<Shop> getShopsList(){	
 		  return shops_list;
 	  }
-	
-	  
+		  
 	  public ArrayList<Shop> getShopsListByCategory(int id){
 		  ArrayList<Shop> templist=new ArrayList<Shop>();
 		   for(Shop s : shops_list){
@@ -114,28 +132,19 @@ public final class Singleton extends Application {
 		  return categories_list;
 	  }
 	  
-	@SuppressWarnings("unchecked")
-	public void refreshSalesList(){
-			 if (!temp_sales_list.isEmpty()) {
-				 // sales_list=temp_sales_list;
-				  sales_list.clear();
-				  sales_list=(ArrayList<Sale>)temp_sales_list.clone();
-				  temp_sales_list.clear();			
-			  }
-	}
-	  
-	@SuppressWarnings("unchecked")
-	public void downloadSales(){
-		  if (!sales_list.isEmpty()) {
-			  temp_sales_list = (ArrayList<Sale>) sales_list.clone();			  
-			  sales_list.clear();
-			  //Log.d("1",String.valueOf(temp_sales_list.size()));
-		  }
+	  public void downloadSales(){//		 
 			  new GetDataSales().execute();		  	  			  
 	  }
+	
+	  public void downloadSearchShops(String query){
+		  keyword=query;
+		  new GetDataSearchSales().execute();			  
+	  }
+	  
 	  public void downloadShops(){
 		  new GetDataShops().execute();			  
 	  }
+	  
 	  public void downloadCategories(){
 		  new GetDataCategories().execute();			  
 	  }
@@ -179,6 +188,40 @@ public final class Singleton extends Application {
 				
 				SalesFragment fragment = new SalesFragment(); 
 	    		fragment.sales=getSalesList();	    		
+	    		appFragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();			
+			}
+		}
+		private class GetDataSearchSales extends AsyncTask<Void, Void, Void> {
+
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();				
+				pDialog = new ProgressDialog(appContext);
+				pDialog.setMessage("Идет загрузка данных...");
+				pDialog.setCancelable(false);				
+				pDialog.show();
+
+			}
+
+			@Override
+			protected Void doInBackground(Void... arg0) {				
+				ServiceHandler sh = new ServiceHandler(appContext);
+				String jsonStr = sh.makeServiceCall(getSearchSalesUrl(), ServiceHandler.GET);
+				keyword="";
+				sh.getSalesList(jsonStr, search_sales_list);
+				return null;
+			}
+
+			@SuppressLint("NewApi")
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+				
+				if (pDialog.isShowing())
+					pDialog.dismiss();
+				
+				SalesFragment fragment = new SalesFragment(); 
+	    		fragment.sales=getSearchSalesList();	    		
 	    		appFragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();			
 			}
 		}
