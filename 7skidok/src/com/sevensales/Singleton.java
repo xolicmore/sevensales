@@ -132,12 +132,13 @@ public final class Singleton extends Application {
 		  return categories_list;
 	  }
 	  
-	  public void downloadSales(){//		 
+	  public void downloadSales(){		 
 			  new GetDataSales().execute();		  	  			  
 	  }
 	
 	  public void downloadSearchShops(String query){
 		  keyword=query;
+		  search_sales_list.clear();
 		  new GetDataSearchSales().execute();			  
 	  }
 	  

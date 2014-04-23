@@ -164,7 +164,7 @@ public class MainActivity extends Activity {
         		fragment.sales=storage.getSalesList();    		
         		
         		FragmentManager fragmentManager = getFragmentManager();
-    	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+    	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack(null).commit();
             	return true;
             }
         };
