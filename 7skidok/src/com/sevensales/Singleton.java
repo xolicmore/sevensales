@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +30,7 @@ public final class Singleton extends Application {
 	private static String sales_url = "http://7skidok.ru/api/?action=sales";	
 	private static String shops_url = "http://7skidok.ru/api/?action=shops";
 	private static String categories_url = "http://7skidok.ru/api/?action=sale_categories";
+	private static String base_command = "http://7skidok.ru/api/?action=";
 	private Context appContext;
 	private FragmentManager appFragmentManager;
 	
@@ -37,6 +40,7 @@ public final class Singleton extends Application {
 	public ArrayList<Category> categories_list=new ArrayList<Category>();
 	
 	public String keyword = "";
+	public String command = "";
 	  
 	  private int data=200;
 	  
@@ -140,6 +144,15 @@ public final class Singleton extends Application {
 		  keyword=query;
 		  search_sales_list.clear();
 		  new GetDataSearchSales().execute();			  
+	  }
+	  
+	  public void sendCommand(String action,Map<String , String> params){
+		  command=base_command+action+"&guid="+getDeviceId();
+		  
+		  for (Map.Entry<String, String> item : params.entrySet()) {
+			command+="&"+item.getKey()+"="+item.getValue();
+		  }
+		  new SendCommand().execute();		  
 	  }
 	  
 	  public void downloadShops(){
@@ -274,6 +287,31 @@ public final class Singleton extends Application {
 //				if (pDialog.isShowing())
 //					pDialog.dismiss();				
 						
+			}
+		}
+		private class SendCommand extends AsyncTask<Void, Void, Void> {
+
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+
+			}
+
+			@Override
+			protected Void doInBackground(Void... arg0) {				
+				ServiceHandler sh = new ServiceHandler(appContext);
+				Log.d("command =", command);
+				String reply = sh.makeServiceCall(command, ServiceHandler.GET);
+				Log.d("reply =", reply);
+				
+				return null;
+			}
+
+			@SuppressLint("NewApi")
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);							
+							
 			}
 		}
 }

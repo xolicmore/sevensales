@@ -20,7 +20,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import com.sevensales.R;
 
@@ -95,7 +97,13 @@ public class MainActivity extends Activity {
         storage=(Singleton) this.getApplication();
         storage.setContext(MainActivity.this);
         storage.setFragmentManager(getFragmentManager());
-        storage.downloadData();       
+        storage.downloadData();     
+        
+        
+//        Map<String,String> test = new HashMap< String, String>(); 
+//        test.put("lol", "123"); 
+//        test.put("lol2", "qwe"); 
+//        storage.setCommand("entry",test );
         
 //      Toast.makeText(getApplicationContext()," main view", Toast.LENGTH_LONG).show();
 //      Log.d("your context MAin--> ", getApplicationContext().toString());
