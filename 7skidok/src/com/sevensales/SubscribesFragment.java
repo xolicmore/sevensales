@@ -5,9 +5,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +19,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class SubscribesFragment extends Fragment {
@@ -25,7 +32,7 @@ public class SubscribesFragment extends Fragment {
 	private static final String KEY = "Subscribe";
 	private SharedPerferencesExecutor<Subscribe> sharedPerferencesExecutor;
 	private SubscribesListItemAdapter adapter;
-	private ListView listview;
+	private ListView listview;	
 	
 	public ArrayList<Subscribe> subscribes_list;
 	
@@ -72,17 +79,42 @@ public class SubscribesFragment extends Fragment {
         
       Button subscribeOnAndroid = (Button) v.findViewById(R.id.subscribeOnAndroid);
       subscribeOnAndroid.setOnClickListener(new OnClickListener() {
-          public void onClick(View v) {
-          	Singleton storage=(Singleton) getActivity().getApplicationContext();
-          	Subscribe q=new Subscribe("qqq", "t");
-          	storage.addToSubscribesList(q);  
-
-          	adapter = new SubscribesListItemAdapter(storage.getSubscribesList(), getActivity(),listview);
-          	listview.setAdapter(adapter);
-//          	listview.refreshDrawableState();
-//          	listview.invalidateViews();
-          
+          public void onClick(View v) {  
+        	  
+          	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+          	builder.setTitle("Новая подписка");          	
+          	final EditText input = new EditText(getActivity());          	
+          	input.setInputType(InputType.TYPE_CLASS_TEXT);
+          	builder.setView(input);
           	
+//          	CheckBox feature1 = new CheckBox(getActivity());
+//          	builder.create().
+          	
+          	builder.setPositiveButton("Добавить", new DialogInterface.OnClickListener() { 
+          	    @Override
+          	    public void onClick(DialogInterface dialog, int which) {
+          	    	Singleton storage=(Singleton) getActivity().getApplicationContext();
+          	    	
+          	    	if (!input.getText().toString().isEmpty()){
+          	    		Subscribe new_item=new Subscribe(input.getText().toString(), "android");
+              	    	storage.addToSubscribesList(new_item);
+              	    	adapter = new SubscribesListItemAdapter(storage.getSubscribesList(), getActivity(),listview);
+                    	listview.setAdapter(adapter);
+          	    	}else{
+          	    		Toast.makeText(getActivity().getApplicationContext(), "Подписка невозможна", 2).show();
+          	    	}
+          	    	
+          	    	
+          	    }
+          	});
+          	builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+          	    @Override
+          	    public void onClick(DialogInterface dialog, int which) {
+          	        dialog.cancel();
+          	    }
+          	});
+
+          	builder.show();
 //          	Map<String,String> test = new HashMap< String, String>(); 
 //          	test.put("id", String.valueOf(sale.id));
 //          	test.put("type", "android");

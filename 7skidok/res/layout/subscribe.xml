@@ -12,7 +12,7 @@
 		    android:layout_gravity="bottom"
 		    android:layout_marginTop="5dp"
 		    android:layout_marginBottom="5dp"  
-		    android:text="Добавить подписку" />
+		    android:text="Добавить подписку(телефон))" />    
     
     <ListView
         android:id="@+id/subscribes_list"

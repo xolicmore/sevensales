@@ -37,7 +37,7 @@ public final class Singleton extends Application {
 	private static String sales_url = "http://7skidok.ru/api/?action=sales";	
 	private static String shops_url = "http://7skidok.ru/api/?action=shops";
 	private static String categories_url = "http://7skidok.ru/api/?action=sale_categories";
-	private static String base_command = "http://7skidok.ru/api/?action=";
+	private static String base_command = "http://7skidok.ru/service/gate.php?action=";
 	private Context appContext;
 	private FragmentManager appFragmentManager;
 	
@@ -164,8 +164,7 @@ public final class Singleton extends Application {
 			  saveSubscribeList();
 		  }else{
 			  Toast.makeText(appContext.getApplicationContext(), "Подписка на такое словое уже существует", 2).show();
-		  }
-		  
+		  }		  
 	  }
 	  
 	  public boolean inSubscribesList(String word){		

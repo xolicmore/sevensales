@@ -2,7 +2,10 @@ package com.sevensales;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -71,12 +75,32 @@ public class SubscribesListItemAdapter extends BaseAdapter {
 	        delete.setOnClickListener(new OnClickListener() {
 	            public void onClick(View v) {   
 	            	
-	            	
+	            	AlertDialog.Builder builder = new AlertDialog.Builder(context);
+	              	builder.setTitle("Подтверждение");          	
+	              	final TextView notice = new TextView(context);          	
+	              	notice.setText("Вы уверены, что точно хотите удалить эту подписку?");
+	              	notice.setPadding(15,15, 15, 15);
+	              	builder.setView(notice);
+	              	
+	              	builder.setPositiveButton("Удалить", new DialogInterface.OnClickListener() { 
+	              	    @Override
+	              	    public void onClick(DialogInterface dialog, int which) {
+	              	    	singleton.deleteInSubscribeListByPosition(i);
+	    	            	listview.setAdapter(new SubscribesListItemAdapter(items, context,listview));
+	              	    }
+	              	});
+	              	builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+	              	    @Override
+	              	    public void onClick(DialogInterface dialog, int which) {
+	              	        dialog.cancel();
+	              	    }
+	              	});
+
+	              	builder.show();
 	              	
 	            	//items.remove(i);
-	            	singleton.deleteInSubscribeListByPosition(i);
-	            	listview.setAdapter(new SubscribesListItemAdapter(items, context,listview));
-	              	Log.d("asd",  String.valueOf(i));
+	            	
+	              	//Log.d("asd",  String.valueOf(i));
 	            	//arrayAdapter.notifyDataSetChanged();
 	            }
 	        }); 
