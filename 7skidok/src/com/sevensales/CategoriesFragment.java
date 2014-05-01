@@ -33,11 +33,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class CategoriesFragment extends Fragment {
-    public static final String ARG_PLANET_NUMBER = "planet_number";
+public class CategoriesFragment extends Fragment {    
     
-    public ArrayList<Category> categories;
-    
+    public ArrayList<Category> categories;    
     
     public CategoriesFragment() {
         // Empty constructor required for fragment subclasses

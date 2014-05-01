@@ -105,17 +105,17 @@ public class SaleFragment extends Fragment {
     	 
         getActivity().setTitle("Скидка");
         
-        Button subscribeOnAndroid = (Button) v.findViewById(R.id.subscribeOnAndroid);
-        subscribeOnAndroid.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-            	Singleton storage=(Singleton) getActivity().getApplicationContext();
-            	Map<String,String> test = new HashMap< String, String>(); 
-            	test.put("id", String.valueOf(sale.id));
-            	test.put("type", "android");
-            	storage.sendCommand("subscribe",test );
-            	notifyUser("Подписка оформлена");
-            }
-        });       
+//        Button subscribeOnAndroid = (Button) v.findViewById(R.id.subscribeOnAndroid);
+//        subscribeOnAndroid.setOnClickListener(new OnClickListener() {
+//            public void onClick(View v) {
+//            	Singleton storage=(Singleton) getActivity().getApplicationContext();
+//            	Map<String,String> test = new HashMap< String, String>(); 
+//            	test.put("id", String.valueOf(sale.id));
+//            	test.put("type", "android");
+//            	storage.sendCommand("subscribe",test );
+//            	notifyUser("Подписка оформлена");
+//            }
+//        });       
                 
         Button sendOnEmail = (Button) v.findViewById(R.id.sendOnEmail);
         

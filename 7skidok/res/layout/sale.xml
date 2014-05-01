@@ -42,14 +42,7 @@
       		android:textColor="#ff0000"
       		android:text=""
       		android:textStyle="bold"/>
-  <Button
-		    android:id="@+id/subscribeOnAndroid"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"  
-		    android:gravity="center"
-		    android:layout_gravity="bottom"
-		    android:layout_marginTop="30dp"    
-		    android:text="Подписаться" />
+
     <Button
 		    android:id="@+id/sendOnEmail"
 		    android:layout_width="fill_parent"

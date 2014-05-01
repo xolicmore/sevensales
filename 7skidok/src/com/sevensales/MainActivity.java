@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
         storage=(Singleton) this.getApplication();
         storage.setContext(MainActivity.this);
         storage.setFragmentManager(getFragmentManager());
-        storage.downloadData();     
+        storage.downloadData();        
         
         
 //        Map<String,String> test = new HashMap< String, String>(); 
@@ -226,6 +226,7 @@ public class MainActivity extends Activity {
     private void selectItem(int position) {
         // update the main content by replacing fragments
     	getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    	FragmentManager fragmentManager = getFragmentManager();
     	//storage.refreshSalesList();
     	//Log.d("q",String.valueOf(storage.sales_list.size()));
     	
@@ -250,39 +251,39 @@ public class MainActivity extends Activity {
     		SalesFragment fragment = new SalesFragment();    		
     		fragment.sales=storage.getSalesList();    		
     		
-    		FragmentManager fragmentManager = getFragmentManager();
+    		
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-	        mDrawerList.setItemChecked(position, true);	        
-	        mDrawerLayout.closeDrawer(mDrawerList);
+	        
     	}
     	
     	if (1==position) {    		
     		ShopsFragment fragment = new ShopsFragment();
-    		fragment.shops=storage.getShopsList();    		   		 
+    		fragment.shops=storage.getShopsList(); 
     		
-    		FragmentManager fragmentManager = getFragmentManager();
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-	        mDrawerList.setItemChecked(position, true);	        
-	        mDrawerLayout.closeDrawer(mDrawerList);
+	        
     	}
     	
     	if (2==position) {    		
     		CategoriesFragment fragment = new CategoriesFragment();
-    		fragment.categories=storage.getCategoriesList();    		   		 
+    		fragment.categories=storage.getCategoriesList();
     		
-    		FragmentManager fragmentManager = getFragmentManager();
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-	        mDrawerList.setItemChecked(position, true);	        
-	        mDrawerLayout.closeDrawer(mDrawerList);
+	        
     	}
     	
     	if (3==position) {    		
     		SettingsFragment fragment = new SettingsFragment(); 
-    		
-    		FragmentManager fragmentManager = getFragmentManager();    		
+    		  		
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-	        mDrawerList.setItemChecked(position, true);	        
-	        mDrawerLayout.closeDrawer(mDrawerList);
+	       
+    	}
+    	
+    	if (4==position) {    		
+    		SubscribesFragment fragment = new SubscribesFragment();
+    		fragment.subscribes_list=storage.getSubscribesList();
+	  		
+	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     	}
     	
     	mDrawerList.setItemChecked(position, true);	        
