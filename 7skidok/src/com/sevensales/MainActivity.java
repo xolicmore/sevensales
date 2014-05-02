@@ -100,10 +100,10 @@ public class MainActivity extends Activity {
         storage.downloadData();        
         
         
-        Map<String,String> test = new HashMap< String, String>(); 
-        test.put("email", "andrsere@yandex.ru");
-        test.put("gcm_id", "none");
-        storage.sendCommand("entry",test );
+//        Map<String,String> test = new HashMap< String, String>(); 
+//        test.put("email", "andrsere@yandex.ru");
+//        test.put("gcm_id", "none");
+//        storage.sendCommand("entry",test );
         
 //      Toast.makeText(getApplicationContext()," main view", Toast.LENGTH_LONG).show();
 //      Log.d("your context MAin--> ", getApplicationContext().toString());

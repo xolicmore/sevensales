@@ -22,6 +22,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.provider.Settings.Secure;
 import android.util.Log;
@@ -58,6 +59,11 @@ public final class Singleton extends Application {
 		  appContext=c;
 		  sharedPerferencesExecutor=new SharedPerferencesExecutor<ArrayList<Subscribe>>(c);
 		  pref = c.getApplicationContext().getSharedPreferences("Preferences", 0);
+		  
+		  if (pref.getString("registered", null)==null){
+			  registration();
+		  }	
+
 	  }
 	  
 	  public void setFragmentManager(FragmentManager f){
@@ -226,9 +232,16 @@ public final class Singleton extends Application {
 		      downloadShops();
 		      downloadSales();
 		  }	  		
-	}
+	  }
 	   
-
+	  public void registration(){		  
+		  Map<String,String> params = new HashMap< String, String>(); 
+	      params.put("email", "andrsere@yandex.ru");
+	      params.put("gcm_id", "none");
+	      sendCommand("entry",params );
+	  }
+	  
+	  
 		private class GetDataSales extends AsyncTask<Void, Void, Void> {
 
 			@Override
@@ -346,7 +359,7 @@ public final class Singleton extends Application {
 						
 			}
 		}
-		private class SendCommand extends AsyncTask<Void, Void, Void> {
+		private class SendCommand extends AsyncTask<Void, Void, String> {
 
 			@Override
 			protected void onPreExecute() {
@@ -355,20 +368,28 @@ public final class Singleton extends Application {
 			}
 
 			@Override
-			protected Void doInBackground(Void... arg0) {				
+			protected String doInBackground(Void... arg0) {				
 				ServiceHandler sh = new ServiceHandler(appContext);
 				Log.d("command =", command);
 				String reply = sh.makeServiceCall(command, ServiceHandler.GET);
 				Log.d("reply =", reply);
 				
-				return null;
+				
+				
+				return reply;
 			}
 
 			@SuppressLint("NewApi")
 			@Override
-			protected void onPostExecute(Void result) {
+			protected void onPostExecute(String result) {
 				super.onPostExecute(result);							
-							
+				
+				if (result.equals("registered")){
+					Editor editor=pref.edit();
+					editor.putString("registered", result);
+					editor.commit();
+				}
+				
 			}
 		}
 }
