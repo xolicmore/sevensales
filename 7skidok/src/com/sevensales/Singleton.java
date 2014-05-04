@@ -164,7 +164,7 @@ public final class Singleton extends Application {
 	  
 	  
 	  public void addToSubscribesList(Subscribe s){		  
-		  Log.d("qwe", String.valueOf(inSubscribesList(s.keyword)) );
+		  //Log.d("qwe", String.valueOf(inSubscribesList(s.keyword)) );
 		  if (!inSubscribesList(s.keyword)) {
 			  subscribes_list.add(s);
 			  saveSubscribeList();

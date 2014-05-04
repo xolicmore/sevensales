@@ -1,6 +1,8 @@
 package com.sevensales;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -85,6 +87,7 @@ public class SubscribesListItemAdapter extends BaseAdapter {
 	              	builder.setPositiveButton("Удалить", new DialogInterface.OnClickListener() { 
 	              	    @Override
 	              	    public void onClick(DialogInterface dialog, int which) {
+	              	    	item.submit(context.getApplicationContext());
 	              	    	singleton.deleteInSubscribeListByPosition(i);
 	    	            	listview.setAdapter(new SubscribesListItemAdapter(items, context,listview));
 	              	    }

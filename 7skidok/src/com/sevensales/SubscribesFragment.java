@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -96,8 +97,9 @@ public class SubscribesFragment extends Fragment {
           	    	Singleton storage=(Singleton) getActivity().getApplicationContext();
           	    	
           	    	if (!input.getText().toString().isEmpty()){
-          	    		Subscribe new_item=new Subscribe(input.getText().toString(), "android");
-              	    	storage.addToSubscribesList(new_item);
+          	    		Subscribe new_item=new Subscribe(input.getText().toString(), "is_android");
+              	    	storage.addToSubscribesList(new_item);              	    	
+	                  	new_item.submit(getActivity().getApplicationContext());	                  	
               	    	adapter = new SubscribesListItemAdapter(storage.getSubscribesList(), getActivity(),listview);
                     	listview.setAdapter(adapter);
           	    	}else{
@@ -115,11 +117,6 @@ public class SubscribesFragment extends Fragment {
           	});
 
           	builder.show();
-//          	Map<String,String> test = new HashMap< String, String>(); 
-//          	test.put("id", String.valueOf(sale.id));
-//          	test.put("type", "android");
-//          	storage.sendCommand("subscribe",test );
-//          	notifyUser("Подписка оформлена");
           }
       });     
         
