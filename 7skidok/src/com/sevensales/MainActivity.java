@@ -17,12 +17,18 @@
 package com.sevensales;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import com.sevensales.R;
 
@@ -32,7 +38,11 @@ import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -79,6 +89,7 @@ import android.widget.Toast;
  * for example enabling or disabling a data overlay on top of the current content.</p>
  */
 public class MainActivity extends Activity {
+    
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -97,7 +108,8 @@ public class MainActivity extends Activity {
         storage=(Singleton) this.getApplication();
         storage.setContext(MainActivity.this);
         storage.setFragmentManager(getFragmentManager());
-        storage.downloadData();        
+        //storage.downloadData();        
+        
         
         
 //        Map<String,String> test = new HashMap< String, String>(); 
@@ -339,4 +351,5 @@ public class MainActivity extends Activity {
             return rootView;
         }
     }
+     
 }

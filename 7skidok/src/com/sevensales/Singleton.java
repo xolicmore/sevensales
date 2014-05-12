@@ -1,6 +1,8 @@
 package com.sevensales;
 
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,11 +10,15 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.reflect.TypeToken;
 
 import android.annotation.SuppressLint;
@@ -33,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public final class Singleton extends Application {
+	
 	private ProgressDialog pDialog;
 	private SharedPreferences pref;
 	private static String sales_url = "http://7skidok.ru/api/?action=sales";	
@@ -41,6 +48,9 @@ public final class Singleton extends Application {
 	private static String base_command = "http://7skidok.ru/service/gate.php?action=";
 	private Context appContext;
 	private FragmentManager appFragmentManager;
+	private GoogleCloudMessaging gcm;
+	private String regid;
+	private static final String SENDER_ID = "384378969768";
 	
 	public ArrayList<Sale> sales_list=new ArrayList<Sale>();
 	public ArrayList<Sale> search_sales_list=new ArrayList<Sale>();
@@ -59,10 +69,12 @@ public final class Singleton extends Application {
 		  appContext=c;
 		  sharedPerferencesExecutor=new SharedPerferencesExecutor<ArrayList<Subscribe>>(c);
 		  pref = c.getApplicationContext().getSharedPreferences("Preferences", 0);
-		  
-		  if (pref.getString("registered", null)==null){
+
+		  if (pref.getString("registered", null)==null){			  
 			  registration();
-		  }	
+		  }else{
+			  Log.d("reg", "already");
+		  }
 
 	  }
 	  
@@ -198,10 +210,6 @@ public final class Singleton extends Application {
 	  public ArrayList<Category> getCategoriesList(){
 		  return categories_list;
 	  }
-	  
-	  public void downloadSales(){		 
-			  new GetDataSales().execute();		  	  			  
-	  }
 	
 	  public void downloadSearchShops(String query){
 		  keyword=query;
@@ -217,32 +225,24 @@ public final class Singleton extends Application {
 		  }
 		  new SendCommand().execute();		  
 	  }
-	  
-	  public void downloadShops(){
-		  new GetDataShops().execute();			  
-	  }
-	  
-	  public void downloadCategories(){
-		  new GetDataCategories().execute();			  
+	  public void addToCommand(String key,String value){
+		  command+="&"+key+"="+value;
 	  }
 	  
 	  public void downloadData() {
 		  if (sales_list.isEmpty()){
-			  downloadCategories();
-		      downloadShops();
-		      downloadSales();
+			  new GetData().execute();
 		  }	  		
 	  }
 	   
-	  public void registration(){		  
+	  public void registration(){		  	  
+		  
 		  Map<String,String> params = new HashMap< String, String>(); 
 	      params.put("email", "andrsere@yandex.ru");
-	      params.put("gcm_id", "none");
 	      sendCommand("entry",params );
 	  }
 	  
-	  
-		private class GetDataSales extends AsyncTask<Void, Void, Void> {
+		private class GetData extends AsyncTask<Void, Void, Void> {
 
 			@Override
 			protected void onPreExecute() {
@@ -257,8 +257,16 @@ public final class Singleton extends Application {
 			@Override
 			protected Void doInBackground(Void... arg0) {				
 				ServiceHandler sh = new ServiceHandler(appContext);
+				
 				String jsonStr = sh.makeServiceCall(getSalesUrl(), ServiceHandler.GET);	
 				sh.getSalesList(jsonStr, sales_list);
+				
+				jsonStr = sh.makeServiceCall(getShopsUrl(), ServiceHandler.GET);				
+				sh.getShopsList(jsonStr, shops_list);
+				
+				jsonStr = sh.makeServiceCall(getCategoriesUrl(), ServiceHandler.GET);				
+				sh.getCategoriesList(jsonStr,categories_list);
+				
 				return null;
 			}
 
@@ -309,56 +317,7 @@ public final class Singleton extends Application {
 	    		appFragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();			
 			}
 		}
-		private class GetDataShops extends AsyncTask<Void, Void, Void> {
-
-			@Override
-			protected void onPreExecute() {
-				super.onPreExecute();
-			}
-
-			@Override
-			protected Void doInBackground(Void... arg0) {				
-				ServiceHandler sh = new ServiceHandler(appContext);
-				String jsonStr = sh.makeServiceCall(getShopsUrl(), ServiceHandler.GET);				
-				sh.getShopsList(jsonStr, shops_list);
-				return null;
-			}
-
-			@SuppressLint("NewApi")
-			@Override
-			protected void onPostExecute(Void result) {
-				super.onPostExecute(result);
-				
-//				if (pDialog.isShowing())
-//					pDialog.dismiss();				
-//						
-			}
-		}
-		private class GetDataCategories extends AsyncTask<Void, Void, Void> {
-
-			@Override
-			protected void onPreExecute() {
-				super.onPreExecute();
-			}
-
-			@Override
-			protected Void doInBackground(Void... arg0) {				
-				ServiceHandler sh = new ServiceHandler(appContext);
-				String jsonStr = sh.makeServiceCall(getCategoriesUrl(), ServiceHandler.GET);				
-				sh.getCategoriesList(jsonStr,categories_list);
-				return null;
-			}
-
-			@SuppressLint("NewApi")
-			@Override
-			protected void onPostExecute(Void result) {
-				super.onPostExecute(result);
-				
-//				if (pDialog.isShowing())
-//					pDialog.dismiss();				
-						
-			}
-		}
+		
 		private class SendCommand extends AsyncTask<Void, Void, String> {
 
 			@Override
@@ -370,12 +329,22 @@ public final class Singleton extends Application {
 			@Override
 			protected String doInBackground(Void... arg0) {				
 				ServiceHandler sh = new ServiceHandler(appContext);
+				
+				if (pref.getString("registered", null)==null){									
+	                if (gcm == null) {
+	                    gcm = GoogleCloudMessaging.getInstance(appContext);
+	                }
+	                try {
+						regid = gcm.register(SENDER_ID);
+					} catch (IOException e) {						
+					}	                
+	                addToCommand("gcm_id", regid);  
+				}	
+				
 				Log.d("command =", command);
-				String reply = sh.makeServiceCall(command, ServiceHandler.GET);
+				String reply="registered";
+				//String reply = sh.makeServiceCall(command, ServiceHandler.GET);
 				Log.d("reply =", reply);
-				
-				
-				
 				return reply;
 			}
 
@@ -385,10 +354,12 @@ public final class Singleton extends Application {
 				super.onPostExecute(result);							
 				
 				if (result.equals("registered")){
+					Log.d("result", result );
 					Editor editor=pref.edit();
 					editor.putString("registered", result);
 					editor.commit();
 				}
+				Log.d("pref ", pref.getString("registered", "lol") );
 				
 			}
 		}

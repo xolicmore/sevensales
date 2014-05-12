@@ -51,7 +51,7 @@ public class SaleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-    	
+    	 
     	 View v = inflater.inflate(R.layout.sale, container, false);  
     	 
     	 
@@ -97,13 +97,13 @@ public class SaleFragment extends Fragment {
 	    		 }
 	    		}.start();
     	 }
-    		
+    	 
     	 tv_name.setText(sale.name);    	 
     	 tv_shop_name.append(sale.shop_name);    	 
     	 tv_date_start.append(sale.date_start);
     	 tv_date_end.append(sale.date_end);
     	 
-        getActivity().setTitle("Скидка");
+         getActivity().setTitle("Скидка");
         
 //        Button subscribeOnAndroid = (Button) v.findViewById(R.id.subscribeOnAndroid);
 //        subscribeOnAndroid.setOnClickListener(new OnClickListener() {
@@ -116,13 +116,13 @@ public class SaleFragment extends Fragment {
 //            	notifyUser("Подписка оформлена");
 //            }
 //        });       
-                
+        
         Button sendOnEmail = (Button) v.findViewById(R.id.sendOnEmail);
         
         SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("Preferences", 0);
         pref.getString("email", "");
         
-        if (!Patterns.EMAIL_ADDRESS.matcher(pref.getString("email", null)).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(pref.getString("email", "")).matches()){
         	sendOnEmail.setVisibility(v.GONE);        	
    	 	}
         
