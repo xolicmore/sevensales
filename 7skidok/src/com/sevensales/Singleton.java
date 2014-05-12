@@ -70,7 +70,7 @@ public final class Singleton extends Application {
 		  sharedPerferencesExecutor=new SharedPerferencesExecutor<ArrayList<Subscribe>>(c);
 		  pref = c.getApplicationContext().getSharedPreferences("Preferences", 0);
 
-		  if (pref.getString("registered", null)==null){			  
+		  if (pref.getString("is_register", null)==null){			  
 			  registration();
 		  }else{
 			  Log.d("reg", "already");
@@ -330,7 +330,7 @@ public final class Singleton extends Application {
 			protected String doInBackground(Void... arg0) {				
 				ServiceHandler sh = new ServiceHandler(appContext);
 				
-				if (pref.getString("registered", null)==null){									
+				if (pref.getString("is_register", null)==null){									
 	                if (gcm == null) {
 	                    gcm = GoogleCloudMessaging.getInstance(appContext);
 	                }
@@ -356,10 +356,10 @@ public final class Singleton extends Application {
 				if (result.equals("registered")){
 					Log.d("result", result );
 					Editor editor=pref.edit();
-					editor.putString("registered", result);
+					editor.putString("is_register", result);
 					editor.commit();
 				}
-				Log.d("pref ", pref.getString("registered", "lol") );
+				Log.d("pref ", pref.getString("is_register", "lol") );
 				
 			}
 		}
