@@ -69,9 +69,13 @@ public final class Singleton extends Application {
 		  appContext=c;
 		  sharedPerferencesExecutor=new SharedPerferencesExecutor<ArrayList<Subscribe>>(c);
 		  pref = c.getApplicationContext().getSharedPreferences("Preferences", 0);
-
-		  if (pref.getString("is_register", null)==null){			  
+//		  Editor editor=pref.edit();
+//			editor.putString("is_register", "-1");
+//			editor.commit();
+		  if (!(pref.getString("is_register", "-1")).equals("1")){		
+			  Toast.makeText(appContext, pref.getString("is_register", "-1"), 15).show();
 			  registration();
+			  
 		  }else{
 			  Log.d("reg", "already");
 		  }
@@ -235,10 +239,9 @@ public final class Singleton extends Application {
 		  }	  		
 	  }
 	   
-	  public void registration(){		  	  
-		  
+	  public void registration(){ 	 
 		  Map<String,String> params = new HashMap< String, String>(); 
-	      params.put("email", "andrsere@yandex.ru");
+	      
 	      sendCommand("entry",params );
 	  }
 	  
@@ -330,7 +333,7 @@ public final class Singleton extends Application {
 			protected String doInBackground(Void... arg0) {				
 				ServiceHandler sh = new ServiceHandler(appContext);
 				
-				if (pref.getString("is_register", null)==null){									
+				if (!(pref.getString("is_register", "-1")).equals("1")){									
 	                if (gcm == null) {
 	                    gcm = GoogleCloudMessaging.getInstance(appContext);
 	                }
@@ -342,8 +345,8 @@ public final class Singleton extends Application {
 				}	
 				
 				Log.d("command =", command);
-				String reply="registered";
-				//String reply = sh.makeServiceCall(command, ServiceHandler.GET);
+				
+				String reply = sh.makeServiceCall(command, ServiceHandler.GET);
 				Log.d("reply =", reply);
 				return reply;
 			}
@@ -351,15 +354,30 @@ public final class Singleton extends Application {
 			@SuppressLint("NewApi")
 			@Override
 			protected void onPostExecute(String result) {
-				super.onPostExecute(result);							
+				super.onPostExecute(result);
 				
-				if (result.equals("registered")){
-					Log.d("result", result );
+				result=result.replaceAll("[\n\r ]","");
+				//Toast.makeText(appContext,  result+" "+"registered", 5000).show();
+//				result = "registrated";
+				
+//				result=result.substring(3);
+//				result=new StringBuilder(result).deleteCharAt(0).toString();
+//				Boolean b= "registered".equalsIgnoreCase(result);
+//				
+//				Toast.makeText(appContext, Arrays.toString( result.toCharArray() ) , 5000).show();
+//				Toast.makeText(appContext, Boolean.toString(b) , 5000).show();
+				
+				//Toast.makeText(appContext,"registrated".getBytes().toString() +" "+nr.getBytes().toString() , 5000).show();
+				if ("registered".equalsIgnoreCase(result)){
+//					Log.d("result", result );
+					//Toast.makeText(appContext, "ADSads" , 5000).show();
 					Editor editor=pref.edit();
-					editor.putString("is_register", result);
+					editor.putString("is_register", "1");
 					editor.commit();
+					
+					
 				}
-				Log.d("pref ", pref.getString("is_register", "lol") );
+//				Log.d("pref ", pref.getString("is_register", "lol") );
 				
 			}
 		}
