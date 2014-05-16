@@ -35,7 +35,9 @@ import com.sevensales.R;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.NotificationManager;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -108,10 +110,30 @@ public class MainActivity extends Activity {
         storage=(Singleton) this.getApplication();
         storage.setContext(MainActivity.this);
         storage.setFragmentManager(getFragmentManager());
-        //storage.downloadData();        
+        storage.downloadData();        
         
+        NotificationManager mNotificationManager=(NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
         
+        final Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+        notificationIntent.setAction(Intent.ACTION_MAIN);
+        notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         
+        Intent intent = getIntent();
+        try{
+            String action = intent.getAction().toUpperCase();
+
+            if(action != null){
+//                if(action.equalsIgnoreCase(getResources().getString(R.string.notification_action_friend))){
+//                    goFrag(getResources().getInteger(R.integer.FRAG_FRIENDS_INT));
+//                }
+                Toast.makeText(getApplicationContext(), "asdasd", 123);
+            }else{
+                Log.d("ASD", "Intent was null");
+            }
+        }catch(Exception e){
+            Log.e("ADS", "Problem consuming action from intent", e);              
+        }
 //        Map<String,String> test = new HashMap< String, String>(); 
 //        test.put("email", "andrsere@yandex.ru");
 //        test.put("gcm_id", "none");
@@ -160,6 +182,7 @@ public class MainActivity extends Activity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
+         
     }
 
     @Override
@@ -351,5 +374,7 @@ public class MainActivity extends Activity {
             return rootView;
         }
     }
+    
+    
      
 }
