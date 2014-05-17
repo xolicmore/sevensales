@@ -4,6 +4,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.R.integer;
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+
 import android.util.Log;
 import android.widget.Toast;
 
@@ -42,11 +44,11 @@ public class GcmIntentService extends IntentService {
              */
             if (GoogleCloudMessaging.
                     MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString(),intent);
+                sendNotification("Send error: " + extras.toString());
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_DELETED.equals(messageType)) {
                 sendNotification("Deleted messages on server: " +
-                        extras.toString(),intent);
+                        extras.toString());
             // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
@@ -59,10 +61,10 @@ public class GcmIntentService extends IntentService {
 //                    } catch (InterruptedException e) {
 //                    }
 //                }
-                Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
+//                Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
-                sendNotification("Received: " + extras.toString(),intent);
-                Log.i(TAG, "Received: " + extras.toString());
+                sendNotification(extras.getString("json"));
+//                Log.i(TAG, "Received: " + extras.toString());
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
@@ -72,28 +74,28 @@ public class GcmIntentService extends IntentService {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
-    private void sendNotification(String msg,Intent intent) {
-    	
-    	Log.d("asdasd", "Adsasd");    	
+    private void sendNotification(String json) {
+    	String msg="ѕо€вились новые интересные скидки";
+//    	Log.d("asdasd", "Adsasd");    	
     	
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class).setAction("skz"), 0);
-
+        
+        Intent intent = new Intent(this,ConnectivityChangeReceiver.class).putExtra("json", json).setAction("newSale");
+        PendingIntent contentIntent = PendingIntent.getBroadcast(this, 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-        .setSmallIcon(R.drawable.action_search)
-        .setContentTitle("GCM Notification")
+        .setSmallIcon(R.drawable.logo)
+        .setContentTitle("7 скидок")
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))
-        .setAutoCancel(true)      
+        .setAutoCancel(true)  
         .setContentText(msg);
         
         
         
-        mBuilder.setContentIntent(contentIntent);
+        mBuilder.setContentIntent(contentIntent);        
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 }

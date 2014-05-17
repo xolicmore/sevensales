@@ -33,6 +33,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.sevensales.R;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.NotificationManager;
@@ -40,10 +41,12 @@ import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -101,47 +104,32 @@ public class MainActivity extends Activity {
     private String[] mElementsTitles;
     
     public Singleton storage;
+    public BroadcastReceiver observer;;
+    public final static String BR ="com.sevensales";
+    
+    public Application app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        app = this.getApplication();
         
         storage=(Singleton) this.getApplication();
         storage.setContext(MainActivity.this);
         storage.setFragmentManager(getFragmentManager());
         storage.downloadData();        
-        
-        NotificationManager mNotificationManager=(NotificationManager)
-                this.getSystemService(Context.NOTIFICATION_SERVICE);
-        
-        final Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
-        notificationIntent.setAction(Intent.ACTION_MAIN);
-        notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        
-        Intent intent = getIntent();
-        try{
-            String action = intent.getAction().toUpperCase();
-
-            if(action != null){
-//                if(action.equalsIgnoreCase(getResources().getString(R.string.notification_action_friend))){
-//                    goFrag(getResources().getInteger(R.integer.FRAG_FRIENDS_INT));
-//                }
-                Toast.makeText(getApplicationContext(), "asdasd", 123);
-            }else{
-                Log.d("ASD", "Intent was null");
-            }
-        }catch(Exception e){
-            Log.e("ADS", "Problem consuming action from intent", e);              
-        }
+//        Toast.makeText(getApplicationContext(), String.valueOf(storage.sales_list.size()), 111).show();
+        //registerReceiver(new ConnectivityChangeReceiver(), new IntentFilter("com.sevensales.MainActivity.ConnectivityChangeReceiver"));
+//        observer = new ConnectivityChangeReceiver();
+//        registerReceiver(observer, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+                     
+//        }
 //        Map<String,String> test = new HashMap< String, String>(); 
 //        test.put("email", "andrsere@yandex.ru");
 //        test.put("gcm_id", "none");
 //        storage.sendCommand("entry",test );
-        
-//      Toast.makeText(getApplicationContext()," main view", Toast.LENGTH_LONG).show();
-//      Log.d("your context MAin--> ", getApplicationContext().toString());
-
+ 
         mTitle = mDrawerTitle = getTitle();
         mElementsTitles = getResources().getStringArray(R.array.left_menu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -177,11 +165,16 @@ public class MainActivity extends Activity {
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+        mDrawerLayout.setDrawerListener(mDrawerToggle);        
+        
         if (savedInstanceState == null) {
             selectItem(0);
         }
+
+		  if (!storage.push_sales_list.isEmpty()) {
+			  selectItem(5);
+			  Log.d("why", "ASd'");
+		  }
          
     }
 
@@ -266,27 +259,11 @@ public class MainActivity extends Activity {
     	//Log.d("q",String.valueOf(storage.sales_list.size()));
     	
     	//Toast.makeText(this,String.valueOf(getFragmentManager().getBackStackEntryCount()), Toast.LENGTH_LONG).show();getFragmentManager().getBackStackEntryCount();
-	        
-//    	if (position!=0){
-//	    	Fragment fragment = new PlanetFragment();
-//	        Bundle args = new Bundle();
-//	        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-//	        fragment.setArguments(args);
-//	
-//	        FragmentManager fragmentManager = getFragmentManager();	      
-//	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();	
-//	        
-//	        // update selected item and title, then close the drawer
-//	        mDrawerList.setItemChecked(position, true);
-//	        setTitle(mPlanetTitles[position]);
-//	        mDrawerLayout.closeDrawer(mDrawerList);
-//    	}
+
     	
     	if (0==position) {    		
     		SalesFragment fragment = new SalesFragment();    		
-    		fragment.sales=storage.getSalesList();    		
-    		
-    		
+    		fragment.sales=storage.getSalesList();    	
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	        
     	}
@@ -320,6 +297,11 @@ public class MainActivity extends Activity {
 	  		
 	        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     	}
+    	if (5==position){
+    		SalesFragment fragment = new SalesFragment(); 
+			  fragment.sales=storage.push_sales_list;
+			  fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+    	}
     	
     	mDrawerList.setItemChecked(position, true);	        
         mDrawerLayout.closeDrawer(mDrawerList);
@@ -350,31 +332,26 @@ public class MainActivity extends Activity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    /**
-     * Fragment that appears in the "content_frame", shows a planet
-     */
-    public static class PlanetFragment extends Fragment {
-        public static final String ARG_PLANET_NUMBER = "planet_number";
-
-        public PlanetFragment() {
-            // Empty constructor required for fragment subclasses
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_planet, container, false);
-            int i = getArguments().getInt(ARG_PLANET_NUMBER);
-            String planet = getResources().getStringArray(R.array.left_menu)[i];
-
-            int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
-                            "drawable", getActivity().getPackageName());
-            ((ImageView) rootView.findViewById(R.id.image)).setImageResource(imageId);
-            getActivity().setTitle(planet);
-            return rootView;
-        }
-    }
+//    @Override
+//    protected void onResume() {
+//       observer = new ConnectivityChangeReceiver();
+//       registerReceiver(
+//    		   observer, 
+//             new IntentFilter(
+//                   ConnectivityManager.CONNECTIVITY_ACTION));
+//       super.onResume();
+//    }
+//     
+//    @Override
+//    protected void onPause() {
+//    	unregisterReceiver(observer);
+//    	super.onPause();
+//    }
+//    @Override
+//    protected void onDestroy(){
+//    	unregisterReceiver(observer);
+//    	super.onDestroy();
+//    }
     
-    
-     
+
 }

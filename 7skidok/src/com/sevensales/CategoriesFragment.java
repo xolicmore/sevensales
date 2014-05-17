@@ -10,7 +10,7 @@ import java.util.Map;
 
 
 import com.sevensales.R;
-import com.sevensales.MainActivity.PlanetFragment;
+
 
 import android.app.Fragment;
 import android.app.FragmentManager;

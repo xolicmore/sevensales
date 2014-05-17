@@ -52,11 +52,12 @@ public final class Singleton extends Application {
 	private String regid;
 	private static final String SENDER_ID = "384378969768";
 	
-	public ArrayList<Sale> sales_list=new ArrayList<Sale>();
+	public ArrayList<Sale> sales_list=new ArrayList<Sale>();	
 	public ArrayList<Sale> search_sales_list=new ArrayList<Sale>();
 	public ArrayList<Shop> shops_list=new ArrayList<Shop>();
 	public ArrayList<Category> categories_list=new ArrayList<Category>();
 	private ArrayList<Subscribe> subscribes_list=new ArrayList<Subscribe>();
+	ArrayList<Sale> push_sales_list=new ArrayList<Sale>();
 	
 	private SharedPerferencesExecutor<ArrayList<Subscribe>> sharedPerferencesExecutor;
 	
@@ -77,7 +78,7 @@ public final class Singleton extends Application {
 			  registration();
 			  
 		  }else{
-			  Log.d("reg", "already");
+//			  Log.d("reg", "already");
 		  }
 
 	  }
@@ -122,6 +123,7 @@ public final class Singleton extends Application {
 	  }
 	  
 	  public ArrayList<Sale> getSalesList(){	
+		  //Log.d("n", String.valueOf(sales_list.size()));
 		  return sales_list;
 	  }
 	  
@@ -177,7 +179,10 @@ public final class Singleton extends Application {
 		  return subscribes_list;
 	  }
 	  
-	  
+	  public void addToSalesList(String jsonStr){
+		  ServiceHandler sh = new ServiceHandler(appContext);		  
+		  sh.getSalesList(jsonStr, sales_list);
+	  }
 	  
 	  public void addToSubscribesList(Subscribe s){		  
 		  //Log.d("qwe", String.valueOf(inSubscribesList(s.keyword)) );
@@ -236,9 +241,40 @@ public final class Singleton extends Application {
 	  public void downloadData() {
 		  if (sales_list.isEmpty()){
 			  new GetData().execute();
-		  }	  		
+		  }
+		  
+		  checkPushSales();		  
 	  }
 	   
+	  public void checkPushSales(){
+		  String push_sales = pref.getString("push_sales", "-1");
+		  if (!push_sales.equals("-1")){
+			  push_sales_list=new ArrayList<Sale>();
+			  ServiceHandler sh = new ServiceHandler(appContext);			  
+			  sh.getSalesList(push_sales, push_sales_list);
+			  Editor editor=pref.edit();
+			  editor.remove("push_sales");
+			  editor.commit();
+			  Boolean flag;		  
+			  
+			  for(Sale ps : push_sales_list){
+				  flag=true;
+				  for(Sale s : sales_list){
+					  if (s.id==ps.id) {
+						  //Log.d("id",String.valueOf(s.id));
+						  flag=false;
+						  break;
+					  }
+				  }
+				  if (flag){
+					  sales_list.add(ps);
+				  }else{
+					  push_sales_list.remove(ps);
+				  }
+			  }	
+			  
+		  }
+	  }
 	  public void registration(){ 	 
 		  Map<String,String> params = new HashMap< String, String>(); 
 	      
@@ -281,9 +317,11 @@ public final class Singleton extends Application {
 				if (pDialog.isShowing())
 					pDialog.dismiss();
 				
-				SalesFragment fragment = new SalesFragment(); 
-	    		fragment.sales=getSalesList();	    		
-	    		appFragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();			
+				if (push_sales_list.isEmpty()){
+					SalesFragment fragment = new SalesFragment(); 
+		    		fragment.sales=getSalesList();	    		
+		    		appFragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();	
+				}						
 			}
 		}
 		private class GetDataSearchSales extends AsyncTask<Void, Void, Void> {
