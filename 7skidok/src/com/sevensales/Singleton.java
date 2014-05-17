@@ -173,7 +173,7 @@ public final class Singleton extends Application {
 
 	  public ArrayList<Subscribe> getSubscribesList(){
 		  subscribes_list.clear();
-		  if (pref.getString("subscribes", null) != null){
+		  if (pref.getString("subscribes", "") != ""){
 			  subscribes_list = sharedPerferencesExecutor.retreive("subscribes", new TypeToken<ArrayList<Subscribe>>(){}.getType());
 	      } 		  
 		  return subscribes_list;
@@ -262,7 +262,7 @@ public final class Singleton extends Application {
 				  for(Sale s : sales_list){
 					  if (s.id==ps.id) {
 						  //Log.d("id",String.valueOf(s.id));
-						  flag=false;
+						  //flag=false;
 						  break;
 					  }
 				  }

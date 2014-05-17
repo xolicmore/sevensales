@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SubscribesListItemAdapter extends BaseAdapter {
 	
@@ -88,7 +89,8 @@ public class SubscribesListItemAdapter extends BaseAdapter {
 	              	    @Override
 	              	    public void onClick(DialogInterface dialog, int which) {
 	              	    	item.submit(context.getApplicationContext());
-	              	    	singleton.deleteInSubscribeListByPosition(i);
+	              	    	//Toast.makeText(context, String.valueOf(items.size()), 1).show();
+	              	    	singleton.deleteInSubscribeListByPosition(i);	              	    	
 	    	            	listview.setAdapter(new SubscribesListItemAdapter(items, context,listview));
 	              	    }
 	              	});
