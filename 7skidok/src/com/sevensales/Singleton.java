@@ -56,8 +56,8 @@ public final class Singleton extends Application {
 	public ArrayList<Sale> search_sales_list=new ArrayList<Sale>();
 	public ArrayList<Shop> shops_list=new ArrayList<Shop>();
 	public ArrayList<Category> categories_list=new ArrayList<Category>();
-	private ArrayList<Subscribe> subscribes_list=new ArrayList<Subscribe>();
-	ArrayList<Sale> push_sales_list=new ArrayList<Sale>();
+	public ArrayList<Subscribe> subscribes_list=new ArrayList<Subscribe>();
+	public ArrayList<Sale> push_sales_list=new ArrayList<Sale>();
 	
 	private SharedPerferencesExecutor<ArrayList<Subscribe>> sharedPerferencesExecutor;
 	
@@ -70,6 +70,7 @@ public final class Singleton extends Application {
 		  appContext=c;
 		  sharedPerferencesExecutor=new SharedPerferencesExecutor<ArrayList<Subscribe>>(c);
 		  pref = c.getApplicationContext().getSharedPreferences("Preferences", 0);
+//		  Toast.makeText(c, pref.getString("notice", "qwe"), 41).show();
 //		  Editor editor=pref.edit();
 //			editor.putString("is_register", "-1");
 //			editor.commit();
@@ -175,7 +176,8 @@ public final class Singleton extends Application {
 		  subscribes_list.clear();
 		  if (pref.getString("subscribes", "") != ""){
 			  subscribes_list = sharedPerferencesExecutor.retreive("subscribes", new TypeToken<ArrayList<Subscribe>>(){}.getType());
-	      } 		  
+	      }
+//		  Log.d("appContext", "lolls+"+subscribes_list.toString());
 		  return subscribes_list;
 	  }
 	  

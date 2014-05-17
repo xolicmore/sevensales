@@ -54,11 +54,11 @@ public class SubscribesFragment extends Fragment {
 //		        return s1.keyword.compareToIgnoreCase(s2.keyword);
 //		    }
 //		});
-        
-        adapter = new SubscribesListItemAdapter(subscribes_list, getActivity(),listview);        
-        
+    	
         listview = (ListView) v.findViewById(R.id.subscribes_list);
+        adapter = new SubscribesListItemAdapter(subscribes_list, getActivity(),listview);
         listview.setAdapter(adapter);
+
         
         listview.setOnItemClickListener(new OnItemClickListener() {
         	

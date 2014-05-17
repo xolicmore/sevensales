@@ -7,6 +7,7 @@ import java.util.Map;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.storage.StorageManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,7 +71,7 @@ public class SubscribesListItemAdapter extends BaseAdapter {
 	        final Subscribe item = items.get(position);
 	        final int i = position;
 	        final LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.subscribes_list_item, parent, false);
-	               
+	             
 	        TextView tv_keyword = (TextView) itemLayout.findViewById(R.id.keyword);
 	        tv_keyword.setText(item.keyword);
 	        
@@ -89,9 +90,16 @@ public class SubscribesListItemAdapter extends BaseAdapter {
 	              	    @Override
 	              	    public void onClick(DialogInterface dialog, int which) {
 	              	    	item.submit(context.getApplicationContext());
-	              	    	//Toast.makeText(context, String.valueOf(items.size()), 1).show();
-	              	    	singleton.deleteInSubscribeListByPosition(i);	              	    	
-	    	            	listview.setAdapter(new SubscribesListItemAdapter(items, context,listview));
+//	              	    	Toast.makeText(context, String.valueOf(items.size()), 1).show();
+	              	    	singleton.deleteInSubscribeListByPosition(i);
+	              	    	//items.remove(i);
+//	              	    	Log.d("appContext", items.toString());
+	              	    	try{
+	              	    		listview.setAdapter(new SubscribesListItemAdapter(items, context,listview));
+	              	    	}catch(NullPointerException e){
+	              	    		
+	              	    	}
+	    	            	
 	              	    }
 	              	});
 	              	builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
